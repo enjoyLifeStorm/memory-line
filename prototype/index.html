@@ -1,0 +1,1779 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>幼小衔接 · 练字记忆曲线与动态书写演示看板</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&display=swap');
+    .font-kaiti {
+      font-family: "Kaiti", "STKaiti", "楷体", "Noto Serif SC", serif;
+    }
+    .font-brush {
+      font-family: "Ma Shan Zheng", "Kaiti", cursive, serif;
+    }
+    .font-child {
+      font-family: "ZCOOL KuaiLe", cursive, sans-serif;
+    }
+
+    /* 1. 汉字米字格 */
+    .mizige-bg {
+      background-color: #fffdf8;
+      background-image: 
+        linear-gradient(to right, rgba(220, 38, 38, 0.2) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(220, 38, 38, 0.2) 1px, transparent 1px);
+      background-size: 100% 100%;
+      position: relative;
+    }
+    .mizige-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: 
+        repeating-linear-gradient(45deg, transparent, transparent 49%, rgba(220, 38, 38, 0.15) 50%, transparent 51%),
+        repeating-linear-gradient(-45deg, transparent, transparent 49%, rgba(220, 38, 38, 0.15) 50%, transparent 51%);
+      background-size: 100% 100%;
+      pointer-events: none;
+    }
+    .mizige-cross {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .mizige-cross::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      border-top: 1px dashed rgba(220, 38, 38, 0.35);
+    }
+    .mizige-cross::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      border-left: 1px dashed rgba(220, 38, 38, 0.35);
+    }
+
+    /* 2. 幼小衔接数字专用日字格 (田字格半格) */
+    .rizige-box {
+      background-color: #fffdf8;
+      border: 3px solid #dc2626;
+      position: relative;
+      width: 190px;
+      height: 270px;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .rizige-box::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      border-top: 1px dashed rgba(220, 38, 38, 0.4);
+    }
+    .rizige-box::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 52%;
+      width: 1px;
+      border-left: 1px dashed rgba(220, 38, 38, 0.25);
+      transform: skewX(-7deg);
+    }
+
+    /* 3. 拼音与英文字母专用四线三格 */
+    .fourline-box {
+      width: 320px;
+      height: 240px;
+      background-color: #fffdf8;
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+    }
+    .fourline-row-up {
+      height: 28%;
+      border-bottom: 1.5px solid #f43f5e;
+      position: relative;
+      background-color: #ffffff;
+    }
+    .fourline-row-mid {
+      height: 44%;
+      border-bottom: 1.5px dashed #f43f5e;
+      background-color: #fefce8;
+      position: relative;
+    }
+    .fourline-row-down {
+      height: 28%;
+      border-bottom: 1.5px solid #f43f5e;
+      background-color: #ffffff;
+      position: relative;
+    }
+
+    /* 声音播放声波动画 */
+    @keyframes sound-wave {
+      0%, 100% { height: 6px; }
+      50% { height: 18px; }
+    }
+    .wave-bar {
+      width: 3px;
+      background-color: currentColor;
+      border-radius: 2px;
+      display: inline-block;
+    }
+    .wave-playing .wave-bar:nth-child(1) { animation: sound-wave 0.6s infinite ease-in-out; }
+    .wave-playing .wave-bar:nth-child(2) { animation: sound-wave 0.6s infinite ease-in-out 0.15s; }
+    .wave-playing .wave-bar:nth-child(3) { animation: sound-wave 0.6s infinite ease-in-out 0.3s; }
+
+    /* 动态运笔笔尖发光光标 */
+    .pen-tip-cursor {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: radial-gradient(circle, #f59e0b 0%, #dc2626 100%);
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.9);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: all 0.04s linear;
+      z-index: 20;
+    }
+  </style>
+</head>
+<body class="bg-amber-50/40 text-stone-800 min-h-screen flex flex-col font-sans antialiased selection:bg-rose-100 selection:text-rose-900">
+
+  <!-- 顶部导航栏 -->
+  <header class="bg-white/95 backdrop-blur border-b border-amber-200/80 sticky top-0 z-30 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 via-amber-500 to-indigo-600 flex items-center justify-center text-white shadow-md text-xl font-black">
+          🌱
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-bold text-lg text-stone-900 tracking-tight font-kaiti">墨韵萌苗 · 幼小衔接记忆练字本</h1>
+            <span class="text-xs bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-full font-bold border border-indigo-300 flex items-center gap-1">
+              <span>🎬</span> 动态笔顺演示
+            </span>
+          </div>
+          <p class="text-xs text-stone-500">动态运笔书写演示 · 语音发声朗读 · 日字格与四线三格 · 艾宾浩斯抗遗忘</p>
+        </div>
+      </div>
+
+      <!-- 视图切换：工作台 vs 记忆日历 -->
+      <div class="flex items-center bg-stone-100 p-1 rounded-2xl border border-stone-200/70">
+        <button onclick="switchView('workspace')" id="nav-btn-workspace" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-rose-700 shadow-xs transition">
+          <span>✍️ 每日临摹台</span>
+        </button>
+        <button onclick="switchView('calendar')" id="nav-btn-calendar" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-medium text-stone-600 hover:text-stone-900 transition">
+          <span>📅 记忆排期日历</span>
+          <span class="w-2 h-2 rounded-full bg-rose-600"></span>
+        </button>
+      </div>
+
+      <!-- 孩子成长激励卡片群 -->
+      <div class="flex items-center space-x-3">
+        <!-- 连击打卡天数 -->
+        <div class="flex items-center bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-xl shadow-2xs">
+          <span class="text-lg mr-1.5 animate-pulse">🔥</span>
+          <div class="text-left leading-tight">
+            <div class="text-2xs text-stone-400 font-medium">连续打卡</div>
+            <div class="text-sm font-bold text-amber-700"><span id="streakDays">6</span> 天</div>
+          </div>
+        </div>
+
+        <!-- 墨水能量星 -->
+        <div class="flex items-center bg-rose-50 border border-rose-200 px-3 py-1.5 rounded-xl shadow-2xs">
+          <span class="text-lg mr-1.5 text-amber-500">⭐</span>
+          <div class="text-left leading-tight">
+            <div class="text-2xs text-stone-400 font-medium">墨汁能量</div>
+            <div class="text-sm font-bold text-rose-700"><span id="inkStars">178</span> 粒</div>
+          </div>
+        </div>
+
+        <!-- 快速添加按钮 -->
+        <button onclick="openAddModal()" class="flex items-center gap-1 bg-rose-700 hover:bg-rose-800 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition shadow-sm active:scale-95 cursor-pointer">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
+          <span>录入启蒙项</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 视图 1：每日练习台 (Workspace View) -->
+  <main id="workspaceView" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 grow grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- 左侧：学科品类过滤与待办清单 (3列) -->
+    <section class="lg:col-span-3 space-y-4">
+      
+      <!-- 幼小衔接 4 大学科品类切换 Pill -->
+      <div class="bg-white rounded-2xl p-3 shadow-sm border border-stone-200/80 space-y-2">
+        <div class="text-2xs font-bold text-stone-400 uppercase tracking-wider px-1">幼小衔接练习品类</div>
+        <div class="grid grid-cols-2 gap-1.5" id="subjectCategoryContainer">
+          <button onclick="setSubjectFilter('all')" id="sub-all" class="flex items-center justify-center gap-1 py-1.5 px-2 rounded-xl text-xs font-bold bg-stone-900 text-white transition">
+            <span>🌈 全部</span>
+          </button>
+          <button onclick="setSubjectFilter('hanzi')" id="sub-hanzi" class="flex items-center justify-center gap-1 py-1.5 px-2 rounded-xl text-xs font-medium text-stone-600 bg-stone-50 hover:bg-amber-50 transition">
+            <span>🀄 基础汉字</span>
+          </button>
+          <button onclick="setSubjectFilter('digit')" id="sub-digit" class="flex items-center justify-center gap-1 py-1.5 px-2 rounded-xl text-xs font-medium text-stone-600 bg-stone-50 hover:bg-rose-50 transition">
+            <span>🔢 数字0-9</span>
+          </button>
+          <button onclick="setSubjectFilter('pinyin')" id="sub-pinyin" class="flex items-center justify-center gap-1 py-1.5 px-2 rounded-xl text-xs font-medium text-stone-600 bg-stone-50 hover:bg-blue-50 transition">
+            <span>🔤 拼音字母</span>
+          </button>
+          <button onclick="setSubjectFilter('letter')" id="sub-letter" class="col-span-2 flex items-center justify-center gap-1 py-1.5 px-2 rounded-xl text-xs font-medium text-stone-600 bg-stone-50 hover:bg-indigo-50 transition">
+            <span>🅰️ 英文字母 (大小写)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 任务筛选卡片 -->
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-stone-200/80">
+        <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+          <h2 class="text-xs font-bold text-stone-800 flex items-center gap-1.5">
+            <span>📅</span> 今日任务 (10月17日)
+          </h2>
+          <span class="text-2xs bg-stone-100 text-stone-600 px-2 py-0.5 rounded-full font-mono" id="todayTaskCount">8 项待练</span>
+        </div>
+
+        <div class="mt-3 space-y-1" id="categoryFilterContainer">
+          <button onclick="setStatusFilter('all')" id="btn-filter-all" class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-rose-50 text-rose-800 border border-rose-200/60 transition">
+            <span class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-rose-600"></span> 全部待练
+            </span>
+            <span class="text-2xs bg-rose-200/60 text-rose-800 px-1.5 py-0.2 rounded-md font-mono" id="badge-all">8</span>
+          </button>
+
+          <button onclick="setStatusFilter('review')" id="btn-filter-review" class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs font-medium text-stone-600 hover:bg-stone-50 transition">
+            <span class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-blue-500"></span> 艾宾浩斯复习
+            </span>
+            <span class="text-2xs bg-blue-100 text-blue-700 px-1.5 py-0.2 rounded-md font-mono" id="badge-review">5</span>
+          </button>
+
+          <button onclick="setStatusFilter('new')" id="btn-filter-new" class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs font-medium text-stone-600 hover:bg-stone-50 transition">
+            <span class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-amber-500"></span> 今日新学项
+            </span>
+            <span class="text-2xs bg-amber-100 text-amber-700 px-1.5 py-0.2 rounded-md font-mono" id="badge-new">3</span>
+          </button>
+
+          <button onclick="setStatusFilter('hard')" id="btn-filter-hard" class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs font-medium text-stone-600 hover:bg-stone-50 transition">
+            <span class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-orange-500"></span> ⚠️ 防反写/易错
+            </span>
+            <span class="text-2xs bg-orange-100 text-orange-700 px-1.5 py-0.2 rounded-md font-mono" id="badge-hard">3</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 待练项目滚动清单 -->
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-stone-200/80">
+        <div class="flex items-center justify-between mb-2.5">
+          <span class="text-xs font-bold text-stone-500 uppercase tracking-wider">今日待练卡片</span>
+          <span class="text-2xs text-stone-400">点击切换</span>
+        </div>
+        <div class="space-y-2 max-h-[310px] overflow-y-auto pr-1" id="charListContainer">
+          <!-- 动态渲染汉字/数字/拼音/字母列表 -->
+        </div>
+      </div>
+
+      <!-- 快速查看日历横幅卡片 -->
+      <div onclick="switchView('calendar')" class="cursor-pointer bg-gradient-to-r from-amber-500 to-rose-600 text-white rounded-2xl p-3.5 shadow-sm hover:opacity-95 transition flex items-center justify-between">
+        <div>
+          <div class="text-2xs font-bold opacity-90">想看明天、后天该复习什么？</div>
+          <div class="text-xs font-bold mt-0.5 flex items-center gap-1">
+            <span>📅 打开记忆排期日历</span>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+          </div>
+        </div>
+        <div class="text-2xl">🗓️</div>
+      </div>
+    </section>
+
+    <!-- 中间：自适应书写舞台（支持动态书写演示与笔尖光标）与反馈 (6列) -->
+    <section class="lg:col-span-6 space-y-4">
+      <!-- 临摹卡片主容器 -->
+      <div class="bg-white rounded-3xl p-6 shadow-sm border border-amber-200/70 relative overflow-hidden">
+        
+        <!-- 顶部信息栏与模式切换 -->
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2" id="currentTagBadges">
+            <!-- 动态标签 -->
+          </div>
+
+          <!-- 模式切换：示字 / 描红 / 空白 -->
+          <div class="flex items-center bg-stone-100 p-0.5 rounded-xl text-xs font-medium text-stone-600">
+            <button onclick="setGridMode('standard')" id="mode-std" class="px-2.5 py-1 rounded-lg bg-white shadow-2xs text-rose-700 font-bold transition">示字</button>
+            <button onclick="setGridMode('trace')" id="mode-trace" class="px-2.5 py-1 rounded-lg hover:text-stone-900 transition">描红</button>
+            <button onclick="setGridMode('blank')" id="mode-blank" class="px-2.5 py-1 rounded-lg hover:text-stone-900 transition">空白自写</button>
+          </div>
+        </div>
+
+        <!-- 读音发声与【动态演示大按钮】控制区 -->
+        <div class="flex flex-wrap items-center justify-between gap-2 py-1 px-1 border-b border-stone-100 pb-2">
+          <!-- 读音与发音 -->
+          <div class="flex items-center gap-2">
+            <span class="text-2xl sm:text-3xl font-serif font-bold text-stone-800 tracking-wider" id="currentPhonic">
+              èr
+            </span>
+            <button onclick="playCurrentSound()" id="soundPlayBtn" class="flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 font-bold px-2.5 py-1 rounded-full text-xs shadow-2xs transition active:scale-95 cursor-pointer">
+              <span class="text-sm">🔊</span>
+              <span id="soundBtnText">发音</span>
+              <span class="flex items-center gap-0.5 ml-0.5 h-3" id="waveContainer">
+                <span class="wave-bar h-1.5"></span>
+                <span class="wave-bar h-3"></span>
+                <span class="wave-bar h-1.5"></span>
+              </span>
+            </button>
+            <button onclick="toggleSlowMode()" id="slowModeBtn" class="text-2xs font-bold text-amber-900 bg-amber-100 px-2 py-1 rounded-full border border-amber-300 transition cursor-pointer">
+              <span id="slowModeIcon">🐢</span> <span id="slowModeLabel">慢速跟读</span>
+            </button>
+          </div>
+
+          <!-- 核心新增：【🎬 播放书写演示】大按钮 -->
+          <button onclick="startStrokeAnimationDemo()" id="btnPlayDemo" class="flex items-center gap-1.5 bg-gradient-to-r from-indigo-600 via-rose-600 to-amber-500 hover:opacity-95 text-white font-bold px-4 py-1.5 rounded-full text-xs shadow-md transition active:scale-95 cursor-pointer animate-pulse">
+            <span class="text-base" id="demoBtnIcon">🎬</span>
+            <span id="demoBtnText">播放书写演示 (看老师写一遍)</span>
+          </button>
+        </div>
+
+        <!-- 自适应书写格核心区域 (带动态笔顺层与笔尖光标) -->
+        <div class="flex flex-col items-center justify-center py-2 min-h-[290px] relative" id="gridCanvasArea">
+          <!-- 由 JS 动态挂载格线与笔画路径 -->
+        </div>
+
+        <!-- 运笔阶段状态提示条 -->
+        <div id="strokeStepStatus" class="text-center py-1 text-xs font-bold text-indigo-700 bg-indigo-50/70 border border-indigo-200/60 rounded-xl hidden transition-all">
+          <span>✍️ 正在演示笔顺：第 1 笔 (右上圆弧向左下斜滑...)</span>
+        </div>
+
+        <!-- 幼小衔接童谣口诀提点 -->
+        <div class="mt-2.5 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-3.5 text-xs text-stone-800 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5 font-bold text-amber-900 text-xs">
+              <span class="text-base">🎵</span>
+              <span>幼小衔接童谣口诀：</span>
+              <span id="currentRhyme" class="text-rose-700 font-bold font-child text-sm">2像小鸭水上漂，半圆弯弯平底横</span>
+            </div>
+            <!-- 口诀语音朗读按钮 -->
+            <button onclick="playRhymeSound()" class="shrink-0 flex items-center gap-1 bg-amber-200/70 hover:bg-amber-300 text-amber-900 font-bold px-2.5 py-1 rounded-xl text-2xs transition active:scale-95 cursor-pointer">
+              <span>📢</span>
+              <span>念口诀</span>
+            </button>
+          </div>
+          <div class="text-2xs text-stone-600 flex items-start gap-1 pl-5">
+            <span>📌</span>
+            <span id="currentStructureTip">日字格右上起笔，向上碰顶线，向右碰右边线，斜滑到左下角，最后沿底线向右画平横。</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 核心重点：练习反馈机制卡片 -->
+      <div class="bg-gradient-to-b from-white to-amber-50/30 rounded-3xl p-5 shadow-sm border border-stone-200/80 space-y-3.5">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-xl">✍️</span>
+            <h3 class="font-bold text-stone-900 text-sm">当次书写反馈与质量自评</h3>
+          </div>
+          <span class="text-2xs text-stone-400">大班启蒙关键在规避反写与占格</span>
+        </div>
+
+        <!-- 5星评分条 -->
+        <div class="bg-stone-50 rounded-2xl p-3.5 border border-stone-200/60 flex flex-col sm:flex-row items-center justify-between gap-2.5">
+          <div class="text-left">
+            <div class="text-xs font-bold text-stone-700">书写质量星级</div>
+            <div class="text-2xs text-stone-400" id="ratingDescText">点击星星打分：优秀（形态端正，没有写反）</div>
+          </div>
+          <div class="flex items-center space-x-1.5" id="starRatingGroup">
+            <button onclick="setRating(1)" class="star-btn text-3xl text-amber-400 hover:scale-110 transition cursor-pointer">★</button>
+            <button onclick="setRating(2)" class="star-btn text-3xl text-amber-400 hover:scale-110 transition cursor-pointer">★</button>
+            <button onclick="setRating(3)" class="star-btn text-3xl text-amber-400 hover:scale-110 transition cursor-pointer">★</button>
+            <button onclick="setRating(4)" class="star-btn text-3xl text-amber-400 hover:scale-110 transition cursor-pointer">★</button>
+            <button onclick="setRating(5)" class="star-btn text-3xl text-amber-400 hover:scale-110 transition cursor-pointer">★</button>
+          </div>
+        </div>
+
+        <!-- 动态专属反馈标签组 -->
+        <div>
+          <div class="text-xs font-bold text-stone-600 mb-1.5 flex items-center justify-between">
+            <span>书写诊断要点（可多选）</span>
+            <span class="text-stone-400 font-normal text-2xs">点击勾选标签</span>
+          </div>
+          <div class="flex flex-wrap gap-1.5" id="feedbackTagGroup">
+            <!-- 动态渲染适合当前品类的标签 -->
+          </div>
+        </div>
+
+        <!-- 操作提交栏 -->
+        <div class="pt-1 flex items-center gap-3">
+          <button onclick="completeCurrentReview()" class="flex-1 bg-gradient-to-r from-rose-700 via-rose-600 to-amber-600 hover:from-rose-800 hover:to-amber-700 text-white font-bold py-3 px-5 rounded-2xl shadow-md flex items-center justify-center gap-2 transition active:scale-[0.98] cursor-pointer text-xs">
+            <span>🎉 提交练习反馈并更新记忆日历</span>
+          </button>
+          <button onclick="markAsHard()" class="bg-orange-50 hover:bg-orange-100 text-orange-800 border border-orange-200 px-3 py-3 rounded-2xl font-bold text-xs transition cursor-pointer flex items-center gap-1 whitespace-nowrap">
+            <span>📌 设为难点</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 右侧：真实公历日期全周期记忆轴 (3列) -->
+    <section class="lg:col-span-3 space-y-4">
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-stone-200/80 space-y-3.5">
+        <div class="flex items-center justify-between pb-2 border-b border-stone-100">
+          <h3 class="text-xs font-bold text-stone-900 flex items-center gap-1">
+            <span>📈</span> 真实复习排期表
+          </h3>
+          <span class="text-2xs bg-rose-50 text-rose-700 px-2 py-0.5 rounded-full font-bold" id="currentStageBadge">Stage 2/6</span>
+        </div>
+
+        <div class="text-xs text-stone-500 flex items-center justify-between">
+          <span>项目【<strong id="summaryChar" class="text-rose-700 text-sm">2</strong>】具体排期：</span>
+          <span class="text-stone-400 font-mono text-2xs">2026年10月</span>
+        </div>
+
+        <!-- 时间节点垂直进度列表 -->
+        <div class="space-y-2.5 relative before:absolute before:left-3.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-stone-200" id="realDateTimeline">
+          <!-- 动态渲染精确日期节点 -->
+        </div>
+
+        <div class="bg-rose-50/70 rounded-xl p-2.5 border border-rose-200/50 text-xs text-rose-900 flex items-center justify-between">
+          <span class="text-2xs">📅 下次计划复习</span>
+          <span class="font-bold font-mono text-rose-700 text-xs" id="nextReviewDateText">10月21日 (4天后)</span>
+        </div>
+      </div>
+
+      <!-- 历史评价足迹 -->
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-stone-200/80 space-y-2.5">
+        <div class="flex items-center justify-between">
+          <h4 class="text-xs font-bold text-stone-700">📜 历史书写足迹</h4>
+          <span class="text-2xs text-stone-400">已记录每次反馈</span>
+        </div>
+        <div class="space-y-1.5" id="historyLogContainer">
+          <!-- 动态渲染历史记录 -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 视图 2：记忆排期与历史日历看板 (Calendar View) -->
+  <main id="calendarView" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 grow hidden">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- 左侧：月度记忆排期日历网格 (8列) -->
+      <section class="lg:col-span-8 bg-white rounded-3xl p-6 shadow-sm border border-stone-200/80 space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-lg font-bold text-stone-900 font-kaiti">2026年 10月 · 幼小衔接记忆全景日历</h2>
+              <span class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-bold">今天: 10月17日</span>
+            </div>
+            <p class="text-xs text-stone-500 mt-0.5">汉字、数字、拼音、英文字母混合抗遗忘排期表</p>
+          </div>
+
+          <div class="flex items-center gap-3 text-xs">
+            <span class="flex items-center gap-1 text-stone-500">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> 过去已练
+            </span>
+            <span class="flex items-center gap-1 text-rose-600 font-bold">
+              <span class="w-2.5 h-2.5 rounded-full bg-rose-600"></span> 今天待办
+            </span>
+            <span class="flex items-center gap-1 text-blue-600">
+              <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> 未来该复习
+            </span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-7 gap-2 text-center text-xs font-bold text-stone-400 py-1">
+          <div>周日</div>
+          <div>周一</div>
+          <div>周二</div>
+          <div>周三</div>
+          <div>周四</div>
+          <div>周五</div>
+          <div>周六</div>
+        </div>
+
+        <div class="grid grid-cols-7 gap-2.5" id="monthCalendarGrid">
+          <!-- 动态渲染日历格子 -->
+        </div>
+
+        <div class="bg-amber-50/60 rounded-2xl p-3.5 border border-amber-200/60 flex items-center justify-between text-xs text-stone-700">
+          <div class="flex items-center gap-4">
+            <div>本月幼小衔接累计打卡：<strong class="text-base text-rose-700 font-bold" id="monthTotalCount">42</strong> 项次</div>
+            <div>通关牢固项：<strong class="text-base text-emerald-700 font-bold">14</strong> 个</div>
+            <div>防反写/重点项：<strong class="text-base text-orange-600 font-bold">3</strong> 个</div>
+          </div>
+          <button onclick="switchView('workspace')" class="bg-rose-700 hover:bg-rose-800 text-white font-bold px-4 py-2 rounded-xl transition cursor-pointer">
+            返回临摹台打卡
+          </button>
+        </div>
+      </section>
+
+      <!-- 右侧：选中日期的日程详细卡片 (4列) -->
+      <section class="lg:col-span-4 bg-white rounded-3xl p-6 shadow-sm border border-stone-200/80 space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+          <div>
+            <div class="text-2xs text-stone-400 font-bold uppercase">日程详情查看</div>
+            <h3 class="text-base font-bold text-stone-900 flex items-center gap-1.5" id="selectedDateTitle">
+              <span>📅</span> 10月17日 (今天)
+            </h3>
+          </div>
+          <span class="text-xs px-2.5 py-1 rounded-full font-bold" id="selectedDateStatusBadge">待练 8 项</span>
+        </div>
+
+        <div class="space-y-2.5 max-h-[460px] overflow-y-auto pr-1" id="selectedDateCharList">
+          <!-- 动态渲染选中日期的具体汉字清单 -->
+        </div>
+
+        <div class="pt-2">
+          <button onclick="switchView('workspace')" id="btnStartPracticeSelected" class="w-full bg-rose-700 hover:bg-rose-800 text-white font-bold py-3 rounded-2xl text-xs shadow transition cursor-pointer flex items-center justify-center gap-1.5">
+            <span>✍️ 开始练习当前日期的项目</span>
+          </button>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- 录入新字模态框 (Modal) -->
+  <div id="addModal" class="fixed inset-0 bg-stone-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-stone-200 space-y-4 animate-scale-in">
+      <div class="flex items-center justify-between pb-2 border-b border-stone-100">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">✍️</span>
+          <h3 class="font-bold text-stone-900 text-base">录入幼小衔接新内容</h3>
+        </div>
+        <button onclick="closeAddModal()" class="text-stone-400 hover:text-stone-600 text-2xl leading-none">&times;</button>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-stone-700 mb-1.5">选择练习品类</label>
+          <div class="grid grid-cols-4 gap-2">
+            <label class="flex flex-col items-center p-2 rounded-xl border border-stone-200 cursor-pointer hover:bg-amber-50 has-checked:border-rose-600 has-checked:bg-rose-50 text-xs">
+              <input type="radio" name="newTypeRadio" value="hanzi" checked class="hidden">
+              <span class="text-base mb-0.5">🀄</span>
+              <span class="font-bold">汉字</span>
+            </label>
+            <label class="flex flex-col items-center p-2 rounded-xl border border-stone-200 cursor-pointer hover:bg-amber-50 has-checked:border-rose-600 has-checked:bg-rose-50 text-xs">
+              <input type="radio" name="newTypeRadio" value="digit" class="hidden">
+              <span class="text-base mb-0.5">🔢</span>
+              <span class="font-bold">数字</span>
+            </label>
+            <label class="flex flex-col items-center p-2 rounded-xl border border-stone-200 cursor-pointer hover:bg-amber-50 has-checked:border-rose-600 has-checked:bg-rose-50 text-xs">
+              <input type="radio" name="newTypeRadio" value="pinyin" class="hidden">
+              <span class="text-base mb-0.5">🔤</span>
+              <span class="font-bold">拼音</span>
+            </label>
+            <label class="flex flex-col items-center p-2 rounded-xl border border-stone-200 cursor-pointer hover:bg-amber-50 has-checked:border-rose-600 has-checked:bg-rose-50 text-xs">
+              <input type="radio" name="newTypeRadio" value="letter" class="hidden">
+              <span class="text-base mb-0.5">🅰️</span>
+              <span class="font-bold">英文</span>
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-stone-700 mb-1">练习内容 (如：春、2、b、Aa)</label>
+          <input type="text" id="newCharInput" placeholder="输入要练习的字符" class="w-full border border-stone-300 rounded-xl px-3.5 py-2 text-base font-bold text-stone-800 focus:outline-none focus:ring-2 focus:ring-rose-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-stone-700 mb-1">拼音发音 / 音标 (可选)</label>
+          <input type="text" id="newPinyinInput" placeholder="如：chūn / èr / bō" class="w-full border border-stone-300 rounded-xl px-3 py-1.5 text-xs text-stone-800 focus:outline-none focus:ring-2 focus:ring-rose-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-stone-700 mb-1">幼小衔接童谣口诀 (必背)</label>
+          <input type="text" id="newRhymeInput" placeholder="如：2像小鸭水上漂 / 右下半圆bbb" class="w-full border border-stone-300 rounded-xl px-3 py-1.5 text-xs text-stone-800 focus:outline-none focus:ring-2 focus:ring-rose-500">
+        </div>
+      </div>
+
+      <div class="pt-2 flex items-center justify-end gap-3">
+        <button onclick="closeAddModal()" class="px-4 py-2 rounded-xl text-xs font-medium text-stone-600 hover:bg-stone-100 transition">取消</button>
+        <button onclick="submitNewItem()" class="bg-rose-700 hover:bg-rose-800 text-white font-bold px-5 py-2 rounded-xl text-xs shadow transition">纳入记忆排期</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 反馈打分完成激励弹窗 -->
+  <div id="rewardModal" class="fixed inset-0 bg-stone-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl text-center space-y-4 border border-amber-200">
+      <div class="text-6xl animate-bounce">🌟</div>
+      <h3 class="font-bold text-xl text-stone-900 font-kaiti">练习完成！棒极了！</h3>
+      <p class="text-xs text-stone-600" id="rewardModalMessage">
+        获得了 <span class="font-bold text-rose-600">+15 墨水能量</span>！小树正在茁壮生长！
+      </p>
+      <div class="bg-amber-50 p-3 rounded-2xl border border-amber-200/80 text-xs text-amber-900 space-y-1 text-left">
+        <div class="font-bold flex items-center gap-1"><span>📅</span> 记忆日历排期已更新：</div>
+        <div id="rewardNextScheduleText">根据本次打分，下一次复习已安排在具体公历日期。</div>
+      </div>
+      <div class="flex gap-2">
+        <button onclick="closeRewardModal(); switchView('calendar')" class="flex-1 bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold py-2.5 rounded-xl text-xs transition">去日历查看排期</button>
+        <button onclick="closeRewardModal()" class="flex-1 bg-rose-700 hover:bg-rose-800 text-white font-bold py-2.5 rounded-xl text-xs transition">练下一个</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 核心数据与幼小衔接全品类渲染逻辑 -->
+  <script>
+    const CURRENT_SIMULATED_DAY = 17;
+    const MONTH_DAYS_COUNT = 31;
+    const FIRST_DAY_WEEKDAY = 4;
+
+    const stageIntervals = [0, 1, 2, 4, 7, 15, 30];
+    const stageNames = ["初学认读", "次日巩固", "短期强化", "周度巩固", "半月复查", "月度考核", "永久牢固"];
+
+    let isSlowVoice = true;
+    let isAnimatingDemo = false;
+
+    let practiceDatabase = [
+      {
+        id: "dg-2",
+        type: "digit",
+        gridType: "rizige",
+        content: "2",
+        phonic: "èr",
+        spokenText: "数字二，二",
+        rhymeTip: "2像小鸭水上漂，半圆弯弯平底横",
+        structureTip: "日字格右上起笔，向上碰顶线，向右碰右边线，斜滑到左下角，最后沿底线向右画平横。",
+        stage: 2,
+        isHard: true,
+        category: "review",
+        initialDate: 15,
+        lastReviewDate: 16,
+        nextReviewDay: 17,
+        strokeAnimation: {
+          viewBox: "0 0 190 270",
+          strokeWidth: 16,
+          strokes: [
+            { name: "第1笔：右上圆弧斜下弯", d: "M 65 72 C 65 42, 125 36, 130 72 C 134 105, 88 165, 48 218", voice: "第一笔：右上圆弧，向左下斜滑" },
+            { name: "第2笔：平直底横线", d: "M 48 218 L 146 218", voice: "第二笔：平贴底线，向右画横" }
+          ]
+        },
+        history: [
+          { date: "10月16日", rating: 3, comment: "下横稍微有点翘，注意贴住日字格底线。" },
+          { date: "10月15日", rating: 2, comment: "初写把鸭子头写向左边反了，已纠偏。" }
+        ]
+      },
+      {
+        id: "py-b",
+        type: "pinyin",
+        gridType: "four_line_grid",
+        content: "b",
+        phonic: "bō (声母)",
+        spokenText: "声母，波，玻，b",
+        rhymeTip: "右下半圆 b b b，大肚向右挺在前",
+        structureTip: "占四线三格之上格和中格。从上格中段起笔写竖直下到第三线，再从中格偏上起笔写右半圆，封口在中格底线。",
+        stage: 2,
+        isHard: true,
+        category: "review",
+        initialDate: 15,
+        lastReviewDate: 16,
+        nextReviewDay: 17,
+        strokeAnimation: {
+          viewBox: "0 0 320 240",
+          strokeWidth: 15,
+          strokes: [
+            { name: "第1笔：从上格直下一竖到底", d: "M 115 28 L 115 174", voice: "第一笔：上格直下一长竖" },
+            { name: "第2笔：中格饱满右下半圆", d: "M 115 90 C 148 76, 185 92, 185 132 C 185 170, 145 178, 115 174", voice: "第二笔：中格大肚右半圆" }
+          ]
+        },
+        history: [
+          { date: "10月16日", rating: 4, comment: "右半圆写得很圆润，未冲出中格线。" },
+          { date: "10月15日", rating: 3, comment: "容易和字母d混淆，强调右下半圆。" }
+        ]
+      },
+      {
+        id: "dg-3",
+        type: "digit",
+        gridType: "rizige",
+        content: "3",
+        phonic: "sān",
+        spokenText: "数字三，三",
+        rhymeTip: "3像耳朵听声音，上下半圆碰中腰",
+        structureTip: "起笔向右上方弧线碰顶，向中间腰线轻碰，再向下划弧碰底线收笔，朝右开口切忌写反！",
+        stage: 0,
+        isHard: false,
+        category: "new",
+        initialDate: 17,
+        lastReviewDate: null,
+        nextReviewDay: 17,
+        strokeAnimation: {
+          viewBox: "0 0 190 270",
+          strokeWidth: 16,
+          strokes: [
+            { name: "第1笔：上半圆碰腰线", d: "M 62 65 C 80 42, 130 42, 126 95 C 122 120, 95 125, 86 125", voice: "第一笔：上半圆朝右，碰腰线" },
+            { name: "第2笔：下半圆碰底线", d: "M 86 125 C 102 125, 136 128, 130 182 C 124 212, 70 216, 56 195", voice: "第二笔：下半圆朝右，碰底线" }
+          ]
+        },
+        history: []
+      },
+      {
+        id: "py-a",
+        type: "pinyin",
+        gridType: "four_line_grid",
+        content: "a",
+        phonic: "ā (单韵母)",
+        spokenText: "单韵母，啊，一声，ā",
+        rhymeTip: "圆圆脸蛋扎小辫，张大嘴巴 a a a",
+        structureTip: "纯住中格！先从中格上方偏右起笔画左半圆，再写竖右弯小辫子，上下紧贴第二三线。",
+        stage: 4,
+        isHard: false,
+        category: "review",
+        initialDate: 10,
+        lastReviewDate: 14,
+        nextReviewDay: 17,
+        strokeAnimation: {
+          viewBox: "0 0 320 240",
+          strokeWidth: 15,
+          strokes: [
+            { name: "第1笔：中格左半圆", d: "M 172 105 C 145 78, 108 85, 108 132 C 108 168, 148 178, 172 152", voice: "第一笔：左半圆脸蛋" },
+            { name: "第2笔：一竖右弯小辫子", d: "M 172 82 L 172 165 C 172 176, 178 180, 188 175", voice: "第二笔：竖右弯小辫子" }
+          ]
+        },
+        history: [
+          { date: "10月14日", rating: 5, comment: "中格极饱满，小辫子很秀气。" }
+        ]
+      },
+      {
+        id: "hz-chun",
+        type: "hanzi",
+        gridType: "mizige",
+        content: "春",
+        phonic: "chūn",
+        spokenText: "春，春天的春",
+        rhymeTip: "三人日上坐，撇捺如伞开",
+        structureTip: "上部三横长短有序，中间最短底横最长；撇捺舒展如大伞盖住日字。",
+        stage: 2,
+        isHard: false,
+        category: "review",
+        initialDate: 15,
+        lastReviewDate: 16,
+        nextReviewDay: 17,
+        strokeAnimation: {
+          viewBox: "0 0 260 260",
+          strokeWidth: 14,
+          strokes: [
+            { name: "第1笔：上平横", d: "M 80 55 L 180 55", voice: "第一笔：平横" },
+            { name: "第2笔：中短横", d: "M 92 82 L 168 82", voice: "第二笔：短横" },
+            { name: "第3笔：下长横", d: "M 55 110 L 205 110", voice: "第三笔：长横" },
+            { name: "第4笔：舒展大撇", d: "M 130 40 C 130 100, 100 170, 45 205", voice: "第四笔：大撇舒展" },
+            { name: "第5笔：开阔平捺", d: "M 125 115 C 145 140, 175 180, 218 205", voice: "第五笔：长捺如伞" },
+            { name: "第6笔：日字框与封口", d: "M 102 145 L 102 215 M 102 145 L 160 145 L 160 215 M 102 180 L 160 180 M 102 215 L 160 215", voice: "第六笔：下部日字平稳端正" }
+          ]
+        },
+        history: [
+          { date: "10月16日", rating: 4, comment: "横平竖直，撇捺自然。" }
+        ]
+      },
+      {
+        id: "hz-yong",
+        type: "hanzi",
+        gridType: "mizige",
+        content: "永",
+        phonic: "yǒng",
+        spokenText: "永，永远的永",
+        rhymeTip: "永字八法备，点横竖撇捺",
+        structureTip: "点居正中，横折蓄势，撇捺舒展互应。",
+        stage: 4,
+        isHard: false,
+        category: "review",
+        initialDate: 10,
+        lastReviewDate: 14,
+        nextReviewDay: 17,
+        strokeAnimation: {
+          viewBox: "0 0 260 260",
+          strokeWidth: 15,
+          strokes: [
+            { name: "第1笔：高山坠石·点", d: "M 130 45 L 138 72", voice: "第一笔：侧点" },
+            { name: "第2笔：横折钩", d: "M 80 88 L 180 88 L 130 160", voice: "第二笔：横折" },
+            { name: "第3笔：铁画银钩·竖钩", d: "M 130 75 L 130 220 L 110 205", voice: "第三笔：中竖挺拔有力" }
+          ]
+        },
+        history: [
+          { date: "10月14日", rating: 5, comment: "点画稳重，横折有力。" }
+        ]
+      },
+      {
+        id: "en-Aa",
+        type: "letter",
+        gridType: "four_line_grid",
+        content: "Aa",
+        phonic: "/eɪ/ (元音字母)",
+        spokenText: "Letter A, /eɪ/",
+        rhymeTip: "大A人字加一横，小a圆圆带小尾",
+        structureTip: "大写A占上两格，小写a全占中格，笔势匀称。",
+        stage: 0,
+        isHard: false,
+        category: "new",
+        initialDate: 17,
+        lastReviewDate: null,
+        nextReviewDay: 17,
+        strokeAnimation: {
+          viewBox: "0 0 320 240",
+          strokeWidth: 14,
+          strokes: [
+            { name: "第1笔：大写A左斜竖", d: "M 100 28 L 55 174", voice: "大写A左斜杠" },
+            { name: "第2笔：大写A右斜竖", d: "M 100 28 L 145 174", voice: "大写A右斜杠" },
+            { name: "第3笔：大写A中间横", d: "M 70 125 L 130 125", voice: "大写A腰间横" },
+            { name: "第4笔：小写a圆圈与尾巴", d: "M 225 105 C 205 80, 168 85, 168 132 C 168 168, 208 178, 225 152 M 225 82 L 225 168 L 235 175", voice: "小写a圆脸与小尾巴" }
+          ]
+        },
+        history: []
+      },
+      {
+        id: "dg-8",
+        type: "digit",
+        gridType: "rizige",
+        content: "8",
+        phonic: "bā",
+        spokenText: "数字八，八",
+        rhymeTip: "8像麻花拧一拧，一笔写成严丝合缝",
+        structureTip: "从右上起笔向左绕S弯，向下交叉，再由下往上穿过腰线封口，切忌写成上下两个孤立圆圈！",
+        stage: 0,
+        isHard: true,
+        category: "new",
+        initialDate: 17,
+        lastReviewDate: null,
+        nextReviewDay: 17,
+        strokeAnimation: {
+          viewBox: "0 0 190 270",
+          strokeWidth: 16,
+          strokes: [
+            { name: "一笔写成：从右上S形旋转闭合", d: "M 115 55 C 80 40, 55 70, 75 105 C 95 130, 135 155, 125 190 C 115 220, 60 215, 60 185 C 60 155, 100 130, 100 105 C 100 75, 80 50, 115 55", voice: "一笔写成：右上起笔，绕S弯交叉封口" }
+          ]
+        },
+        history: []
+      }
+    ];
+
+    const pastPracticedLogs = {
+      12: [
+        { char: "2", type: "数字", rating: 3 },
+        { char: "b", type: "拼音", rating: 4 }
+      ],
+      13: [
+        { char: "永", type: "汉字", rating: 4 },
+        { char: "a", type: "拼音", rating: 5 }
+      ],
+      14: [
+        { char: "永", type: "汉字", rating: 5 },
+        { char: "a", type: "拼音", rating: 5 }
+      ],
+      15: [
+        { char: "2", type: "数字", rating: 2 },
+        { char: "b", type: "拼音", rating: 3 },
+        { char: "春", type: "汉字", rating: 4 }
+      ],
+      16: [
+        { char: "2", type: "数字", rating: 3 },
+        { char: "b", type: "拼音", rating: 4 },
+        { char: "春", type: "汉字", rating: 4 }
+      ]
+    };
+
+    let currentSelectedId = "dg-2";
+    let currentSubjectFilter = "all";
+    let currentStatusFilter = "all";
+    let currentGridMode = "standard";
+    let currentRating = 5;
+    let selectedCalendarDay = 17;
+
+    async function startStrokeAnimationDemo() {
+      if (isAnimatingDemo) return;
+      const target = practiceDatabase.find(h => h.id === currentSelectedId);
+      if (!target || !target.strokeAnimation) {
+        alert("当前字符暂未配置笔顺动画！");
+        return;
+      }
+
+      isAnimatingDemo = true;
+      const btn = document.getElementById("btnPlayDemo");
+      const btnText = document.getElementById("demoBtnText");
+      const btnIcon = document.getElementById("demoBtnIcon");
+      const statusEl = document.getElementById("strokeStepStatus");
+
+      btn.classList.add("opacity-80");
+      btnIcon.innerText = "⏳";
+      btnText.innerText = "演示进行中...";
+      statusEl.classList.remove("hidden");
+
+      const svgContainer = document.getElementById("strokeSvgDemoLayer");
+      const staticDisplayChar = document.getElementById("staticDisplayChar");
+      const penCursor = document.getElementById("penTipCursor");
+
+      if (staticDisplayChar) staticDisplayChar.style.opacity = "0.08";
+      if (svgContainer) svgContainer.innerHTML = "";
+      if (penCursor) penCursor.classList.remove("hidden");
+
+      const animData = target.strokeAnimation;
+      const strokes = animData.strokes;
+
+      for (let i = 0; i < strokes.length; i++) {
+        const stroke = strokes[i];
+        statusEl.innerHTML = `<span>✍️ 正在演示笔顺：<strong>第 ${i + 1}/${strokes.length} 笔【${stroke.name}】</strong></span>`;
+        if (stroke.voice) speakText(stroke.voice, "zh-CN");
+
+        await drawSvgStrokePath(svgContainer, stroke.d, animData.strokeWidth, penCursor);
+        await new Promise(r => setTimeout(r, 380));
+      }
+
+      if (penCursor) penCursor.classList.add("hidden");
+      statusEl.innerHTML = `<span class="text-emerald-700">🎉 演示完毕！轮到小朋友拿起小铅笔，在纸上工整临摹一遍啦！</span>`;
+      btnIcon.innerText = "🔄";
+      btnText.innerText = "再看一遍演示";
+      btn.classList.remove("opacity-80");
+      isAnimatingDemo = false;
+
+      setTimeout(() => {
+        if (!isAnimatingDemo && staticDisplayChar) {
+          staticDisplayChar.style.opacity = "1";
+        }
+      }, 4000);
+    }
+
+    function drawSvgStrokePath(container, pathData, strokeWidth, cursorEl) {
+      return new Promise((resolve) => {
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", pathData);
+        path.setAttribute("fill", "none");
+        path.setAttribute("stroke", "#dc2626");
+        path.setAttribute("stroke-width", strokeWidth);
+        path.setAttribute("stroke-linecap", "round");
+        path.setAttribute("stroke-linejoin", "round");
+
+        container.appendChild(path);
+
+        const length = path.getTotalLength();
+        path.style.strokeDasharray = length;
+        path.style.strokeDashoffset = length;
+
+        const duration = Math.max(700, length * 4.5);
+        let startTime = null;
+
+        function animate(timestamp) {
+          if (!startTime) startTime = timestamp;
+          const elapsed = timestamp - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+
+          const easeProgress = 0.5 - Math.cos(progress * Math.PI) / 2;
+          path.style.strokeDashoffset = length * (1 - easeProgress);
+
+          if (cursorEl) {
+            const currentPoint = path.getPointAtLength(length * easeProgress);
+            const svgRect = container.getBoundingClientRect();
+            const viewBox = container.viewBox.baseVal;
+            const scaleX = svgRect.width / viewBox.width;
+            const scaleY = svgRect.height / viewBox.height;
+
+            cursorEl.style.left = `${currentPoint.x * scaleX}px`;
+            cursorEl.style.top = `${currentPoint.y * scaleY}px`;
+          }
+
+          if (progress < 1) {
+            requestAnimationFrame(animate);
+          } else {
+            resolve();
+          }
+        }
+
+        requestAnimationFrame(animate);
+      });
+    }
+
+    function playCurrentSound() {
+      const target = practiceDatabase.find(h => h.id === currentSelectedId);
+      if (!target) return;
+
+      const wave = document.getElementById("waveContainer");
+      const textSpan = document.getElementById("soundBtnText");
+
+      wave.classList.add("wave-playing");
+      textSpan.innerText = "播放中";
+
+      const textToSpeak = target.spokenText || target.content;
+      const lang = target.type === "letter" ? "en-US" : "zh-CN";
+
+      speakText(textToSpeak, lang, () => {
+        wave.classList.remove("wave-playing");
+        textSpan.innerText = "发音";
+      });
+    }
+
+    function playRhymeSound() {
+      const target = practiceDatabase.find(h => h.id === currentSelectedId);
+      if (!target) return;
+
+      const fullRhyme = `童谣口诀：${target.rhymeTip}。${target.structureTip}`;
+      speakText(fullRhyme, "zh-CN");
+    }
+
+    function speakText(text, lang = "zh-CN", onEndCallback = null) {
+      if (!('speechSynthesis' in window)) {
+        if (onEndCallback) onEndCallback();
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = lang;
+      utterance.rate = isSlowVoice ? 0.75 : 1.0;
+      utterance.pitch = 1.15;
+
+      utterance.onend = () => { if (onEndCallback) onEndCallback(); };
+      utterance.onerror = () => { if (onEndCallback) onEndCallback(); };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function toggleSlowMode() {
+      isSlowVoice = !isSlowVoice;
+      const icon = document.getElementById("slowModeIcon");
+      const label = document.getElementById("slowModeLabel");
+
+      if (isSlowVoice) {
+        icon.innerText = "🐢";
+        label.innerText = "慢速";
+      } else {
+        icon.innerText = "🐰";
+        label.innerText = "常速";
+      }
+    }
+
+    function init() {
+      renderCharList();
+      selectItem(currentSelectedId);
+      updateBadges();
+      renderMonthCalendar();
+      selectCalendarDay(17);
+    }
+
+    function switchView(viewName) {
+      const ws = document.getElementById("workspaceView");
+      const cal = document.getElementById("calendarView");
+      const btnWs = document.getElementById("nav-btn-workspace");
+      const btnCal = document.getElementById("nav-btn-calendar");
+
+      if (viewName === "workspace") {
+        ws.classList.remove("hidden");
+        cal.classList.add("hidden");
+        btnWs.className = "flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-rose-700 shadow-xs transition";
+        btnCal.className = "flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-medium text-stone-600 hover:text-stone-900 transition";
+      } else {
+        ws.classList.add("hidden");
+        cal.classList.remove("hidden");
+        btnWs.className = "flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-medium text-stone-600 hover:text-stone-900 transition";
+        btnCal.className = "flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-rose-700 shadow-xs transition";
+        renderMonthCalendar();
+        selectCalendarDay(selectedCalendarDay);
+      }
+    }
+
+    function setSubjectFilter(sub) {
+      currentSubjectFilter = sub;
+      const subs = ["all", "hanzi", "digit", "pinyin", "letter"];
+      subs.forEach(s => {
+        const btn = document.getElementById(`sub-${s}`);
+        if (s === sub) {
+          btn.className = "flex items-center justify-center gap-1 py-1.5 px-2 rounded-xl text-xs font-bold bg-stone-900 text-white transition";
+        } else {
+          btn.className = "flex items-center justify-center gap-1 py-1.5 px-2 rounded-xl text-xs font-medium text-stone-600 bg-stone-50 hover:bg-stone-100 transition";
+        }
+      });
+      renderCharList();
+    }
+
+    function setStatusFilter(status) {
+      currentStatusFilter = status;
+      const statuses = ["all", "review", "new", "hard"];
+      statuses.forEach(st => {
+        const btn = document.getElementById(`btn-filter-${st}`);
+        if (st === status) {
+          btn.className = "w-full flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-rose-50 text-rose-800 border border-rose-200/60 transition";
+        } else {
+          btn.className = "w-full flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs font-medium text-stone-600 hover:bg-stone-50 transition";
+        }
+      });
+      renderCharList();
+    }
+
+    function renderCharList() {
+      const container = document.getElementById("charListContainer");
+      container.innerHTML = "";
+
+      let filteredList = practiceDatabase.filter(c => c.nextReviewDay === CURRENT_SIMULATED_DAY || c.stage >= 6);
+
+      if (currentSubjectFilter !== "all") {
+        filteredList = filteredList.filter(c => c.type === currentSubjectFilter);
+      }
+
+      if (currentStatusFilter === "review") {
+        filteredList = filteredList.filter(c => c.category === "review");
+      } else if (currentStatusFilter === "new") {
+        filteredList = filteredList.filter(c => c.category === "new");
+      } else if (currentStatusFilter === "hard") {
+        filteredList = filteredList.filter(c => c.isHard);
+      }
+
+      if (filteredList.length === 0) {
+        container.innerHTML = `<div class="text-center py-6 text-xs text-stone-400">该分类下暂无待练项</div>`;
+        return;
+      }
+
+      filteredList.forEach(item => {
+        const isSelected = item.id === currentSelectedId;
+        const div = document.createElement("div");
+        div.className = `p-2 rounded-xl border flex items-center justify-between cursor-pointer transition ${
+          isSelected 
+            ? 'bg-rose-50/80 border-rose-400 shadow-2xs' 
+            : 'bg-white hover:bg-stone-50 border-stone-200/60'
+        }`;
+        div.onclick = () => selectItem(item.id);
+
+        let iconTag = "🀄";
+        if (item.type === "digit") iconTag = "🔢";
+        if (item.type === "pinyin") iconTag = "🔤";
+        if (item.type === "letter") iconTag = "🅰️";
+
+        let stageBadge = item.stage === 0 
+          ? `<span class="text-2xs bg-amber-100 text-amber-800 px-1 py-0.2 rounded font-medium">新学</span>` 
+          : `<span class="text-2xs bg-blue-100 text-blue-800 px-1 py-0.2 rounded font-mono">Stage ${item.stage}</span>`;
+
+        div.innerHTML = `
+          <div class="flex items-center space-x-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center font-bold text-lg text-stone-900 ${item.type === 'hanzi' ? 'font-kaiti' : ''}">
+              ${item.content}
+            </div>
+            <div>
+              <div class="flex items-center gap-1">
+                <span class="text-xs font-bold text-stone-800">${item.content}</span>
+                <span class="text-2xs text-stone-400 font-mono">${item.phonic}</span>
+                ${item.isHard ? '<span class="text-2xs bg-orange-100 text-orange-700 px-1 rounded font-bold">防反写</span>' : ''}
+              </div>
+              <div class="text-2xs text-stone-400 flex items-center gap-1">
+                <span>${iconTag}</span>
+                <span>${item.type === 'digit' ? '日字格' : item.type === 'hanzi' ? '米字格' : '四线三格'}</span>
+              </div>
+            </div>
+          </div>
+          <div class="text-right">
+            ${stageBadge}
+            <div class="text-2xs text-stone-400 mt-0.5">今天到期</div>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function selectItem(id) {
+      currentSelectedId = id;
+      const target = practiceDatabase.find(h => h.id === id);
+      if (!target) return;
+
+      document.getElementById("currentPhonic").innerText = target.phonic;
+      document.getElementById("currentRhyme").innerText = target.rhymeTip;
+      document.getElementById("currentStructureTip").innerText = target.structureTip;
+      document.getElementById("summaryChar").innerText = target.content;
+      document.getElementById("strokeStepStatus").classList.add("hidden");
+
+      let typeLabel = "🀄 基础汉字";
+      if (target.type === "digit") typeLabel = "🔢 阿拉伯数字";
+      if (target.type === "pinyin") typeLabel = "🔤 汉语拼音";
+      if (target.type === "letter") typeLabel = "🅰️ 英文大小写";
+
+      const tagContainer = document.getElementById("currentTagBadges");
+      tagContainer.innerHTML = `
+        <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-amber-200">${typeLabel}</span>
+        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-blue-200">
+          ${target.stage === 0 ? '今日新学 (10月17日)' : `第 ${target.stage} 次复习 (${stageNames[target.stage]})`}
+        </span>
+        ${target.isHard ? '<span class="bg-orange-100 text-orange-800 text-xs font-bold px-2 py-0.5 rounded-full">⚠️ 重点防反写/易错</span>' : ''}
+      `;
+
+      renderAdaptiveGrid(target);
+      renderFeedbackTags(target);
+      renderRealDateTimeline(target);
+      renderHistory(target);
+      renderCharList();
+    }
+
+    function renderAdaptiveGrid(target) {
+      const area = document.getElementById("gridCanvasArea");
+      area.innerHTML = "";
+
+      let textStyleClass = "text-stone-900";
+      if (currentGridMode === "trace") {
+        textStyleClass = "text-rose-300/60 border-dashed";
+      } else if (currentGridMode === "blank") {
+        textStyleClass = "text-transparent";
+      }
+
+      const anim = target.strokeAnimation || { viewBox: "0 0 200 200", strokeWidth: 14 };
+
+      if (target.gridType === "mizige") {
+        area.innerHTML = `
+          <div class="w-64 h-64 border-4 border-rose-700 rounded-2xl shadow-inner relative mizige-bg flex items-center justify-center select-none overflow-hidden">
+            <div class="mizige-cross"></div>
+            <span id="staticDisplayChar" class="font-kaiti text-9xl sm:text-[140px] leading-none ${textStyleClass} transition-all duration-300 font-black">
+              ${target.content}
+            </span>
+            <svg id="strokeSvgDemoLayer" viewBox="${anim.viewBox}" class="absolute inset-0 w-full h-full pointer-events-none z-10"></svg>
+            <div id="penTipCursor" class="pen-tip-cursor hidden"></div>
+          </div>
+          <div class="text-2xs text-stone-400 mt-2 font-mono flex items-center gap-2">
+            <span>📐 标准大号田字米字格 (上下左右居中)</span>
+          </div>
+        `;
+      } else if (target.gridType === "rizige") {
+        area.innerHTML = `
+          <div class="rizige-box shadow-inner flex items-center justify-center select-none relative">
+            <span class="absolute top-1 right-2 text-3xs text-rose-300 font-mono">右上起笔</span>
+            <span class="absolute bottom-1 left-2 text-3xs text-rose-300 font-mono">底线收笔</span>
+            <span id="staticDisplayChar" class="font-sans text-[160px] leading-none ${textStyleClass} transition-all duration-300 font-bold select-none pb-2">
+              ${target.content}
+            </span>
+            <svg id="strokeSvgDemoLayer" viewBox="${anim.viewBox}" class="absolute inset-0 w-full h-full pointer-events-none z-10"></svg>
+            <div id="penTipCursor" class="pen-tip-cursor hidden"></div>
+          </div>
+          <div class="text-2xs text-stone-500 mt-2 font-mono flex items-center gap-2">
+            <span>📐 幼小衔接数字标准日字格 (含 7° 倾斜虚线引导与防反写界标)</span>
+          </div>
+        `;
+      } else {
+        area.innerHTML = `
+          <div class="fourline-box select-none">
+            <div class="fourline-row-up flex items-center justify-center">
+              <span class="text-3xs text-rose-300 absolute left-2 top-1">上格 (头)</span>
+            </div>
+            <div class="fourline-row-mid flex items-center justify-center">
+              <span class="text-3xs text-amber-500 absolute left-2 top-1 font-bold">中格 (身)</span>
+            </div>
+            <div class="fourline-row-down flex items-center justify-center">
+              <span class="text-3xs text-rose-300 absolute left-2 top-1">下格 (尾)</span>
+            </div>
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <span id="staticDisplayChar" class="font-serif text-[130px] leading-none tracking-normal ${textStyleClass} select-none font-bold" style="transform: translateY(-4px);">
+                ${target.content}
+              </span>
+            </div>
+            <svg id="strokeSvgDemoLayer" viewBox="${anim.viewBox}" class="absolute inset-0 w-full h-full pointer-events-none z-10"></svg>
+            <div id="penTipCursor" class="pen-tip-cursor hidden"></div>
+          </div>
+          <div class="text-2xs text-stone-500 mt-2 font-mono flex items-center gap-2">
+            <span>📐 标准规范四线三格 (中格浅黄强化核心占位区)</span>
+          </div>
+        `;
+      }
+    }
+
+    function renderFeedbackTags(target) {
+      const container = document.getElementById("feedbackTagGroup");
+      container.innerHTML = "";
+
+      let tags = [];
+      if (target.type === "digit") {
+        tags = [
+          { text: "✨ 规范未反写 (方向正确)", positive: true },
+          { text: "✨ 贴合日字格斜度", positive: true },
+          { text: "✨ 封口圆润严密", positive: true },
+          { text: "⚠️ 占格太满/顶格太大", positive: false },
+          { text: "❌ 左右写反 (镜像反向)", positive: false, alert: true },
+          { text: "❌ 倒笔画 (起笔错误)", positive: false, alert: true }
+        ];
+      } else if (target.type === "pinyin" || target.type === "letter") {
+        tags = [
+          { text: "✨ 占格规范 (中格饱满)", positive: true },
+          { text: "✨ b/d/p/q 方向分清", positive: true },
+          { text: "✨ 竖画笔直无倒勾", positive: true },
+          { text: "⚠️ 冲出上格/出界", positive: false },
+          { text: "⚠️ 下格尾巴太短", positive: false },
+          { text: "❌ 镜像混淆 (如b写成d)", positive: false, alert: true }
+        ];
+      } else {
+        tags = [
+          { text: "✨ 横平竖直", positive: true },
+          { text: "✨ 撇捺舒展", positive: true },
+          { text: "✨ 重心居中平稳", positive: true },
+          { text: "⚠️ 间架结构偏散", positive: false },
+          { text: "⚠️ 偏旁过紧过挤", positive: false },
+          { text: "❌ 笔顺错误/倒笔画", positive: false, alert: true }
+        ];
+      }
+
+      tags.forEach(t => {
+        const btn = document.createElement("button");
+        btn.onclick = () => toggleTag(btn);
+        btn.className = `tag-chip text-2xs px-2.5 py-1 rounded-full border transition cursor-pointer ${
+          t.positive 
+            ? 'border-emerald-300 bg-emerald-50 text-emerald-800 font-medium' 
+            : t.alert
+              ? 'border-rose-200 bg-white text-stone-600 hover:bg-rose-50'
+              : 'border-amber-200 bg-white text-stone-600 hover:bg-amber-50'
+        }`;
+        btn.innerText = t.text;
+        container.appendChild(btn);
+      });
+    }
+
+    function toggleTag(btn) {
+      if (btn.classList.contains("bg-emerald-50") || btn.classList.contains("bg-rose-100")) {
+        btn.className = "tag-chip text-2xs px-2.5 py-1 rounded-full border border-stone-200 bg-white text-stone-600 hover:bg-stone-50 transition cursor-pointer";
+      } else {
+        btn.className = "tag-chip text-2xs px-2.5 py-1 rounded-full border border-emerald-300 bg-emerald-50 text-emerald-800 font-medium transition cursor-pointer";
+      }
+    }
+
+    function setGridMode(mode) {
+      currentGridMode = mode;
+      const btnStd = document.getElementById("mode-std");
+      const btnTrace = document.getElementById("mode-trace");
+      const btnBlank = document.getElementById("mode-blank");
+
+      btnStd.className = "px-2.5 py-1 rounded-lg hover:text-stone-900 transition";
+      btnTrace.className = "px-2.5 py-1 rounded-lg hover:text-stone-900 transition";
+      btnBlank.className = "px-2.5 py-1 rounded-lg hover:text-stone-900 transition";
+
+      if (mode === "standard") {
+        btnStd.className = "px-2.5 py-1 rounded-lg bg-white shadow-2xs text-rose-700 font-bold transition";
+      } else if (mode === "trace") {
+        btnTrace.className = "px-2.5 py-1 rounded-lg bg-white shadow-2xs text-rose-700 font-bold transition";
+      } else {
+        btnBlank.className = "px-2.5 py-1 rounded-lg bg-white shadow-2xs text-rose-700 font-bold transition";
+      }
+
+      const target = practiceDatabase.find(h => h.id === currentSelectedId);
+      if (target) renderAdaptiveGrid(target);
+    }
+
+    function renderRealDateTimeline(item) {
+      const timeline = document.getElementById("realDateTimeline");
+      timeline.innerHTML = "";
+      document.getElementById("currentStageBadge").innerText = `Stage ${item.stage}/6`;
+
+      const initDay = item.initialDate || 15;
+
+      stageIntervals.forEach((interval, idx) => {
+        const plannedDay = initDay + interval;
+        const isPast = idx < item.stage;
+        const isCurrent = idx === item.stage;
+
+        let dotColor = "bg-stone-300";
+        let dateTextColor = "text-stone-400";
+        let statusBadge = `<span class="text-2xs text-stone-400">计划</span>`;
+
+        let dateLabel = plannedDay <= 31 ? `10月${plannedDay}日` : `11月${plannedDay - 31}日`;
+
+        if (isPast) {
+          dotColor = "bg-emerald-500 ring-4 ring-emerald-100";
+          dateTextColor = "text-stone-700 font-semibold";
+          statusBadge = `<span class="text-2xs bg-emerald-50 text-emerald-700 px-1.5 py-0.2 rounded font-medium">已完成</span>`;
+        } else if (isCurrent) {
+          dotColor = "bg-rose-600 ring-4 ring-rose-100 animate-pulse";
+          dateTextColor = "text-rose-900 font-bold";
+          dateLabel += " (今天)";
+          statusBadge = `<span class="text-2xs bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full font-bold">今天到期</span>`;
+        }
+
+        const div = document.createElement("div");
+        div.className = "flex items-start space-x-2.5 text-xs relative";
+        div.innerHTML = `
+          <div class="w-3.5 h-3.5 rounded-full ${dotColor} mt-0.5 z-10 shrink-0"></div>
+          <div class="flex-1 flex items-center justify-between leading-tight">
+            <div>
+              <div class="${dateTextColor} text-xs">${dateLabel} · ${stageNames[idx]}</div>
+              <div class="text-2xs text-stone-400">间隔 +${interval} 天</div>
+            </div>
+            ${statusBadge}
+          </div>
+        `;
+        timeline.appendChild(div);
+      });
+
+      if (item.stage >= 6) {
+        document.getElementById("nextReviewDateText").innerText = "已进入永久牢固字库";
+      } else {
+        const nextInterval = stageIntervals[item.stage + 1];
+        const nextDay = initDay + nextInterval;
+        const nextText = nextDay <= 31 ? `10月${nextDay}日 (${nextDay - CURRENT_SIMULATED_DAY}天后)` : `11月${nextDay - 31}日`;
+        document.getElementById("nextReviewDateText").innerText = nextText;
+      }
+    }
+
+    function renderHistory(item) {
+      const container = document.getElementById("historyLogContainer");
+      container.innerHTML = "";
+      if (!item.history || item.history.length === 0) {
+        container.innerHTML = `<div class="text-center py-3 text-xs text-stone-400">暂无历史练习记录，今天初次启航！</div>`;
+        return;
+      }
+
+      item.history.forEach(log => {
+        const stars = "★".repeat(log.rating) + "☆".repeat(5 - log.rating);
+        const div = document.createElement("div");
+        div.className = "p-2 rounded-xl bg-stone-50 border border-stone-200/50 text-xs space-y-0.5";
+        div.innerHTML = `
+          <div class="flex justify-between text-stone-500 text-2xs">
+            <span class="font-bold text-stone-600">${log.date}</span>
+            <span class="text-amber-500 font-bold">${stars} (${log.rating}星)</span>
+          </div>
+          <div class="text-stone-700 font-medium text-xs">“${log.comment}”</div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function setRating(rating) {
+      currentRating = rating;
+      const starBtns = document.querySelectorAll(".star-btn");
+      starBtns.forEach((btn, index) => {
+        if (index < rating) {
+          btn.className = "star-btn text-3xl text-amber-400 hover:scale-110 transition cursor-pointer";
+        } else {
+          btn.className = "star-btn text-3xl text-stone-200 hover:scale-110 transition cursor-pointer";
+        }
+      });
+
+      const descs = [
+        "1星：出现反写或严重占格偏差，强制次日重练！",
+        "2星：书写生疏，安排在明天继续复习",
+        "3星：基本过关，方向与笔顺平顺，按常规排期",
+        "4星：良好端正，占格规整，顺利晋级下一阶段",
+        "5星：完美！形态优美、未写反、获双倍墨水星！"
+      ];
+      document.getElementById("ratingDescText").innerText = descs[rating - 1];
+    }
+
+    function completeCurrentReview() {
+      const target = practiceDatabase.find(h => h.id === currentSelectedId);
+      if (!target) return;
+
+      let rewardInk = 10;
+      let nextMsg = "";
+
+      if (currentRating <= 2) {
+        target.stage = Math.max(1, target.stage - 1);
+        target.isHard = true;
+        target.category = "hard";
+        target.nextReviewDay = CURRENT_SIMULATED_DAY + 1;
+        rewardInk = 5;
+        nextMsg = `由于反馈存在反写或占格偏差，【${target.content}】已自动标记为【难点关注】，安排在明天（10月18日）再次重练！`;
+      } else {
+        target.stage = Math.min(6, target.stage + 1);
+        if (target.stage >= 6) {
+          target.category = "mastered";
+          target.nextReviewDay = 999;
+          rewardInk = 25;
+          nextMsg = `太棒了！【${target.content}】已顺利通过全周期考核，登入永久掌握殿堂！`;
+        } else {
+          const nextInterval = stageIntervals[target.stage];
+          target.nextReviewDay = (target.initialDate || 15) + nextInterval;
+          rewardInk = currentRating === 5 ? 18 : 12;
+          nextMsg = `根据本次 ${currentRating} 星好评，【${target.content}】顺利晋级！下一次复习已安排在：10月${target.nextReviewDay}日。`;
+        }
+      }
+
+      target.history.unshift({
+        date: `10月17日 (今天)`,
+        rating: currentRating,
+        comment: currentRating >= 4 ? "书写规范，没有反写，占格到位。" : "稍微有倒笔画，明日继续加练。"
+      });
+
+      const inkStars = parseInt(document.getElementById("inkStars").innerText) + rewardInk;
+      document.getElementById("inkStars").innerText = inkStars;
+
+      document.getElementById("rewardModalMessage").innerHTML = `获得了 <span class="font-bold text-rose-600">+${rewardInk} 墨水能量</span>！小树正在茁壮生长！`;
+      document.getElementById("rewardNextScheduleText").innerText = nextMsg;
+      document.getElementById("rewardModal").classList.remove("hidden");
+
+      updateBadges();
+      selectItem(target.id);
+      renderMonthCalendar();
+    }
+
+    function markAsHard() {
+      const target = practiceDatabase.find(h => h.id === currentSelectedId);
+      if (!target) return;
+      target.isHard = !target.isHard;
+      if (target.isHard) target.category = "hard";
+      alert(`已将【${target.content}】标记为防反写难点项！`);
+      updateBadges();
+      selectItem(target.id);
+      renderMonthCalendar();
+    }
+
+    function updateBadges() {
+      const todayTasks = practiceDatabase.filter(c => c.nextReviewDay === CURRENT_SIMULATED_DAY);
+      const todayReview = todayTasks.filter(c => c.stage > 0).length;
+      const todayNew = todayTasks.filter(c => c.stage === 0).length;
+      const hardCount = practiceDatabase.filter(c => c.isHard).length;
+
+      document.getElementById("badge-all").innerText = todayTasks.length;
+      document.getElementById("badge-review").innerText = todayReview;
+      document.getElementById("badge-new").innerText = todayNew;
+      document.getElementById("badge-hard").innerText = hardCount;
+      document.getElementById("todayTaskCount").innerText = `${todayTasks.length} 项待练`;
+    }
+
+    function renderMonthCalendar() {
+      const grid = document.getElementById("monthCalendarGrid");
+      grid.innerHTML = "";
+
+      for (let i = 0; i < FIRST_DAY_WEEKDAY; i++) {
+        const empty = document.createElement("div");
+        empty.className = "h-20 bg-stone-50/50 rounded-2xl border border-dashed border-stone-200/50 opacity-40";
+        grid.appendChild(empty);
+      }
+
+      for (let day = 1; day <= MONTH_DAYS_COUNT; day++) {
+        const cell = document.createElement("div");
+        const isToday = day === CURRENT_SIMULATED_DAY;
+        const isPast = day < CURRENT_SIMULATED_DAY;
+        const isSelected = day === selectedCalendarDay;
+
+        let cellContent = "";
+        let borderClass = "border-stone-200/70 hover:border-amber-400";
+        let bgClass = "bg-white";
+
+        if (isSelected) {
+          borderClass = "border-2 border-rose-600 shadow-md ring-2 ring-rose-100";
+        }
+
+        if (isToday) {
+          bgClass = "bg-rose-50/40";
+          borderClass = isSelected ? "border-2 border-rose-700 shadow-md ring-2 ring-rose-200" : "border-2 border-rose-400 shadow-xs";
+          const todayTasks = practiceDatabase.filter(c => c.nextReviewDay === day);
+          cellContent = `
+            <div class="mt-1 flex flex-col gap-0.5">
+              <span class="text-2xs bg-rose-600 text-white font-bold px-1 py-0.2 rounded text-center">待练 ${todayTasks.length} 项</span>
+              <div class="text-2xs text-stone-600 truncate text-center">${todayTasks.map(t => t.content).slice(0, 4).join(' ')}</div>
+            </div>
+          `;
+        } else if (isPast) {
+          const logs = pastPracticedLogs[day];
+          if (logs && logs.length > 0) {
+            bgClass = "bg-emerald-50/30";
+            cellContent = `
+              <div class="mt-1 flex flex-col gap-0.5">
+                <span class="text-2xs bg-emerald-100 text-emerald-800 font-medium px-1 py-0.2 rounded text-center">已打卡 ${logs.length} 项</span>
+                <div class="text-2xs text-stone-400 truncate text-center">${logs.map(l => l.char).join(' ')}</div>
+              </div>
+            `;
+          } else {
+            cellContent = `<div class="mt-2 text-2xs text-stone-300 text-center">-</div>`;
+          }
+        } else {
+          const futureTasks = practiceDatabase.filter(c => c.nextReviewDay === day);
+          if (futureTasks.length > 0) {
+            bgClass = "bg-blue-50/30";
+            cellContent = `
+              <div class="mt-1 flex flex-col gap-0.5">
+                <span class="text-2xs bg-blue-100 text-blue-800 font-bold px-1 py-0.2 rounded text-center">复习 ${futureTasks.length} 项</span>
+                <div class="text-2xs text-blue-600 font-mono truncate text-center">${futureTasks.map(t => t.content).join(' ')}</div>
+              </div>
+            `;
+          } else {
+            cellContent = `<div class="mt-2 text-2xs text-stone-200 text-center">无计划</div>`;
+          }
+        }
+
+        cell.className = `h-20 p-2 rounded-2xl border transition cursor-pointer flex flex-col justify-between ${bgClass} ${borderClass}`;
+        cell.onclick = () => selectCalendarDay(day);
+
+        cell.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold ${isToday ? 'text-rose-700 text-sm' : isPast ? 'text-stone-700' : 'text-stone-500'} font-mono">${day}</span>
+            ${isToday ? '<span class="w-2 h-2 rounded-full bg-rose-600 animate-ping"></span>' : ''}
+          </div>
+          ${cellContent}
+        `;
+        grid.appendChild(cell);
+      }
+    }
+
+    function selectCalendarDay(day) {
+      selectedCalendarDay = day;
+      renderMonthCalendar();
+
+      const titleEl = document.getElementById("selectedDateTitle");
+      const badgeEl = document.getElementById("selectedDateStatusBadge");
+      const listEl = document.getElementById("selectedDateCharList");
+
+      const isToday = day === CURRENT_SIMULATED_DAY;
+      const isPast = day < CURRENT_SIMULATED_DAY;
+
+      titleEl.innerHTML = `<span>📅</span> 10月${day}日 ${isToday ? '(今天)' : isPast ? '(历史练字足迹)' : '(幼小衔接复习排期)'}`;
+      listEl.innerHTML = "";
+
+      if (isToday) {
+        const todayTasks = practiceDatabase.filter(c => c.nextReviewDay === day);
+        badgeEl.className = "text-xs px-2.5 py-1 rounded-full font-bold bg-rose-100 text-rose-800";
+        badgeEl.innerText = `待练 ${todayTasks.length} 项`;
+
+        todayTasks.forEach(task => {
+          let typeIcon = task.type === 'digit' ? '🔢 数字' : task.type === 'pinyin' ? '🔤 拼音' : task.type === 'letter' ? '🅰️ 英文' : '🀄 汉字';
+          const div = document.createElement("div");
+          div.className = "p-3 rounded-2xl border border-stone-200 bg-white shadow-2xs flex items-center justify-between";
+          div.innerHTML = `
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center font-bold text-xl text-stone-900">
+                ${task.content}
+              </div>
+              <div>
+                <div class="text-xs font-bold text-stone-800">${task.content} <span class="text-stone-400 font-normal">(${task.phonic})</span></div>
+                <div class="text-2xs text-stone-400">${typeIcon} · ${task.stage === 0 ? '今日新学' : 'Stage ' + task.stage}</div>
+              </div>
+            </div>
+            <button onclick="jumpToPracticeItem('${task.id}')" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 px-3 py-1.5 rounded-xl font-bold transition">去练这个</button>
+          `;
+          listEl.appendChild(div);
+        });
+      } else if (isPast) {
+        const logs = pastPracticedLogs[day];
+        if (logs && logs.length > 0) {
+          badgeEl.className = "text-xs px-2.5 py-1 rounded-full font-bold bg-emerald-100 text-emerald-800";
+          badgeEl.innerText = `已打卡 ${logs.length} 项`;
+
+          logs.forEach(log => {
+            const stars = "★".repeat(log.rating) + "☆".repeat(5 - log.rating);
+            const div = document.createElement("div");
+            div.className = "p-3 rounded-2xl border border-emerald-100 bg-emerald-50/30 flex items-center justify-between";
+            div.innerHTML = `
+              <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-white border border-emerald-200 flex items-center justify-center font-bold text-xl text-stone-900">
+                  ${log.char}
+                </div>
+                <div>
+                  <div class="text-xs font-bold text-stone-800">【${log.char}】(${log.type})</div>
+                  <div class="text-2xs text-emerald-700 font-medium">抗遗忘效果显著</div>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-amber-500 text-xs font-bold">${stars}</div>
+              </div>
+            `;
+            listEl.appendChild(div);
+          });
+        } else {
+          badgeEl.className = "text-xs px-2.5 py-1 rounded-full font-bold bg-stone-100 text-stone-500";
+          badgeEl.innerText = "未安排练字";
+          listEl.innerHTML = `<div class="text-center py-10 text-xs text-stone-400">当天没有安排练习</div>`;
+        }
+      } else {
+        const futureTasks = practiceDatabase.filter(c => c.nextReviewDay === day);
+        if (futureTasks.length > 0) {
+          badgeEl.className = "text-xs px-2.5 py-1 rounded-full font-bold bg-blue-100 text-blue-800";
+          badgeEl.innerText = `计划复习 ${futureTasks.length} 项`;
+
+          futureTasks.forEach(task => {
+            let typeIcon = task.type === 'digit' ? '🔢 数字' : task.type === 'pinyin' ? '🔤 拼音' : task.type === 'letter' ? '🅰️ 英文' : '🀄 汉字';
+            const div = document.createElement("div");
+            div.className = "p-3 rounded-2xl border border-blue-100 bg-blue-50/30 flex items-center justify-between";
+            div.innerHTML = `
+              <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-white border border-blue-200 flex items-center justify-center font-bold text-xl text-stone-900">
+                  ${task.content}
+                </div>
+                <div>
+                  <div class="text-xs font-bold text-stone-800">【${task.content}】(${typeIcon})</div>
+                  <div class="text-2xs text-blue-700">命中艾宾浩斯复习节点</div>
+                </div>
+              </div>
+              <span class="text-2xs bg-white text-blue-800 border border-blue-200 px-2 py-1 rounded-lg font-bold">待到期复习</span>
+            `;
+            listEl.appendChild(div);
+          });
+        } else {
+          badgeEl.className = "text-xs px-2.5 py-1 rounded-full font-bold bg-stone-100 text-stone-500";
+          badgeEl.innerText = "无复习任务";
+          listEl.innerHTML = `<div class="text-center py-10 text-xs text-stone-400">当天没有安排复习任务</div>`;
+        }
+      }
+    }
+
+    function jumpToPracticeItem(id) {
+      selectItem(id);
+      switchView('workspace');
+    }
+
+    function openAddModal() {
+      document.getElementById("addModal").classList.remove("hidden");
+    }
+    function closeAddModal() {
+      document.getElementById("addModal").classList.add("hidden");
+    }
+
+    function submitNewItem() {
+      const char = document.getElementById("newCharInput").value.trim();
+      const pinyin = document.getElementById("newPinyinInput").value.trim() || "";
+      const rhyme = document.getElementById("newRhymeInput").value.trim() || "认真书写，规范运笔！";
+      
+      const typeRadios = document.getElementsByName("newTypeRadio");
+      let selectedType = "hanzi";
+      for (const r of typeRadios) {
+        if (r.checked) selectedType = r.value;
+      }
+
+      if (!char) {
+        alert("请输入要练习的字符内容！");
+        return;
+      }
+
+      let gridType = "mizige";
+      if (selectedType === "digit") gridType = "rizige";
+      if (selectedType === "pinyin" || selectedType === "letter") gridType = "four_line_grid";
+
+      const newId = selectedType + "-" + (practiceDatabase.length + 1);
+      practiceDatabase.unshift({
+        id: newId,
+        type: selectedType,
+        gridType: gridType,
+        content: char,
+        phonic: pinyin,
+        spokenText: char,
+        rhymeTip: rhyme,
+        structureTip: "按照标准格线书写，注意起笔与收笔位置。",
+        stage: 0,
+        isHard: selectedType === "digit" || selectedType === "pinyin",
+        category: "new",
+        initialDate: CURRENT_SIMULATED_DAY,
+        lastReviewDate: null,
+        nextReviewDay: CURRENT_SIMULATED_DAY,
+        strokeAnimation: {
+          viewBox: "0 0 200 200",
+          strokeWidth: 14,
+          strokes: [{ name: "基础示范笔画", d: "M 40 100 L 160 100", voice: "起笔平稳横向右" }]
+        },
+        history: []
+      });
+
+      closeAddModal();
+      alert(`【${char}】已成功录入今日启蒙练习计划，并将按艾宾浩斯规律自动安排日历复习！`);
+      updateBadges();
+      selectItem(newId);
+      renderMonthCalendar();
+    }
+
+    function closeRewardModal() {
+      document.getElementById("rewardModal").classList.add("hidden");
+    }
+
+    window.onload = init;
+  </script>
+</body>
+</html>

@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小树苗练字 - 幼小衔接记忆曲线练字与发音系统</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #c4473a;
+            --primary-light: #fbeee8;
+            --primary-hover: #ad3b2f;
+            --accent: #2e7d32;
+            --accent-light: #e8f5e9;
+            --bg-color: #f7f4ed;
+            --card-bg: #ffffff;
+            --text-main: #2c2925;
+            --text-muted: #797166;
+            --border-color: #e5ded2;
+            --shadow-sm: 0 2px 8px rgba(74, 52, 33, 0.06);
+            --shadow-md: 0 8px 24px rgba(74, 52, 33, 0.1);
+            --radius-md: 16px;
+            --radius-lg: 24px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(196, 71, 58, 0.03) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(46, 125, 50, 0.03) 0%, transparent 20%);
+        }
+
+        /* 顶部导航 */
+        header {
+            background: #ffffff;
+            border-bottom: 2px solid var(--border-color);
+            padding: 14px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            font-size: 30px;
+            background: var(--primary-light);
+            padding: 6px 10px;
+            border-radius: 12px;
+            border: 1px dashed var(--primary);
+        }
+
+        .logo-text h1 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .voice-engine-badge {
+            background: #f0f7ff;
+            color: #0066cc;
+            border: 1px solid #b3d7ff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .voice-engine-badge:hover {
+            background: #e1efff;
+            box-shadow: 0 2px 6px rgba(0, 102, 204, 0.15);
+        }
+
+        .stat-badge {
+            background: var(--accent-light);
+            color: var(--accent);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* 标签切换栏 */
+        .tab-bar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px 16px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 8px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tab-btn:hover {
+            background: #f0ece3;
+            color: var(--text-main);
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(196, 71, 58, 0.25);
+        }
+
+        /* 主容器 */
+        main {
+            max-width: 1100px;
+            width: 100%;
+            margin: 20px auto;
+            padding: 0 16px 40px;
+            flex: 1;
+        }
+
+        .content-panel {
+            display: none;
+        }
+
+        .content-panel.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 工作台双栏布局 */
+        .workspace-grid {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        @media (max-width: 860px) {
+            .workspace-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 左侧任务卡片列表 */
+        .task-sidebar {
+            background: var(--card-bg);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .category-filter {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed var(--border-color);
+            overflow-x: auto;
+        }
+
+        .filter-chip {
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid var(--border-color);
+            background: #fbf9f5;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .filter-chip.active {
+            background: var(--primary-light);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .card-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 480px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .character-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background: #ffffff;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .character-card:hover {
+            border-color: var(--primary);
+            transform: translateX(4px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .character-card.active {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .card-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .char-avatar {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            font-family: 'Ma Shan Zheng', 'Noto Sans SC', serif;
+            background: #fdfaf4;
+            border-radius: 8px;
+            border: 1px solid #ebdccb;
+            color: var(--primary);
+        }
+
+        .char-avatar.number-avatar {
+            font-family: 'Noto Sans SC', sans-serif;
+            color: #0077cc;
+            background: #f0f7ff;
+            border-color: #cce4ff;
+        }
+
+        .char-avatar.pinyin-avatar {
+            font-family: 'Noto Sans SC', sans-serif;
+            color: #2e7d32;
+            background: #f1f8e9;
+            border-color: #dcedc8;
+        }
+
+        .char-meta h3 {
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+
+        .char-meta span {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .stage-pill {
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            background: #eee8de;
+            color: #635b51;
+        }
+
+        .stage-pill.due {
+            background: #ffebee;
+            color: #c62828;
+            font-weight: 700;
+        }
+
+        /* 右侧书写工作台 */
+        .stage-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .stage-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .character-title {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+        }
+
+        .character-title h2 {
+            font-size: 38px;
+            font-family: 'Ma Shan Zheng', 'Noto Sans SC', serif;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .character-title .pinyin-tag {
+            font-size: 18px;
+            color: #8c7b6c;
+            font-weight: 600;
+        }
+
+        .play-voice-btn {
+            background: var(--primary-light);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .play-voice-btn:hover {
+            background: var(--primary);
+            color: #ffffff;
+        }
+
+        /* 口诀童谣横幅 */
+        .chant-banner {
+            background: #fff9e6;
+            border-left: 4px solid #ffb300;
+            padding: 10px 16px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #795548;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* 书写大格展示区 */
+        .writing-canvas-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 0;
+            background: #fbfaf7;
+            border-radius: 16px;
+            border: 1px dashed var(--border-color);
+            position: relative;
+        }
+
+        .grid-wrapper {
+            position: relative;
+            background: #ffffff;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* 米字格 */
+        .mi-zi-ge {
+            width: 240px;
+            height: 240px;
+            border: 2px solid #d9534f;
+            position: relative;
+            background-color: #fffefb;
+            background-image: 
+                linear-gradient(to right, transparent 49.5%, rgba(217, 83, 79, 0.35) 49.5%, rgba(217, 83, 79, 0.35) 50.5%, transparent 50.5%),
+                linear-gradient(to bottom, transparent 49.5%, rgba(217, 83, 79, 0.35) 49.5%, rgba(217, 83, 79, 0.35) 50.5%, transparent 50.5%),
+                linear-gradient(45deg, transparent 49.5%, rgba(217, 83, 79, 0.2) 49.5%, rgba(217, 83, 79, 0.2) 50.5%, transparent 50.5%),
+                linear-gradient(-45deg, transparent 49.5%, rgba(217, 83, 79, 0.2) 49.5%, rgba(217, 83, 79, 0.2) 50.5%, transparent 50.5%);
+        }
+
+        /* 日字格 (数字专用，带倾斜与腰线) */
+        .ri-zi-ge {
+            width: 180px;
+            height: 260px;
+            border: 2px solid #0077cc;
+            position: relative;
+            background-color: #fdfefe;
+            background-image: 
+                linear-gradient(to bottom, transparent 49.5%, rgba(0, 119, 204, 0.3) 49.5%, rgba(0, 119, 204, 0.3) 50.5%, transparent 50.5%),
+                linear-gradient(83deg, transparent 49.5%, rgba(0, 119, 204, 0.25) 49.5%, rgba(0, 119, 204, 0.25) 50.5%, transparent 50.5%);
+        }
+
+        /* 四线三格 (拼音/英文字母专用) */
+        .four-line-grid {
+            width: 260px;
+            height: 220px;
+            border: 2px solid #2e7d32;
+            position: relative;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .four-line-grid .line-slot {
+            flex: 1;
+            border-bottom: 1.5px dashed rgba(46, 125, 50, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: rgba(46, 125, 50, 0.4);
+        }
+
+        .four-line-grid .line-slot:last-child {
+            border-bottom: none;
+        }
+
+        .four-line-grid .slot-middle {
+            background: rgba(255, 249, 196, 0.45);
+        }
+
+        /* 笔画 SVG 容器 */
+        .stroke-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .stroke-path {
+            fill: none;
+            stroke: #2c2925;
+            stroke-width: 14;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 0.8s ease-in-out;
+        }
+
+        /* 运笔光标点 */
+        .brush-cursor {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: #ff3b30;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px rgba(255, 59, 48, 0.8);
+            display: none;
+            z-index: 10;
+        }
+
+        /* 笔顺演示控制栏 */
+        .demo-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .action-btn {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .action-btn.primary {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+        }
+
+        .action-btn.primary:hover {
+            background: var(--primary-hover);
+        }
+
+        /* 笔画指引要点提示 */
+        .hints-panel {
+            margin-top: 16px;
+            padding: 12px 16px;
+            background: #fdfaf4;
+            border-radius: 12px;
+            border: 1px solid #ede4d5;
+            font-size: 13px;
+            color: #635b51;
+            line-height: 1.6;
+        }
+
+        /* 即时反馈打分 */
+        .feedback-section {
+            margin-top: 20px;
+            padding-top: 18px;
+            border-top: 1px dashed var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .feedback-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .feedback-buttons {
+            display: flex;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .rating-btn {
+            flex: 1;
+            padding: 12px 10px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background: #ffffff;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+        }
+
+        .rating-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .rating-btn.hard:hover { border-color: #e53935; background: #ffebee; }
+        .rating-btn.good:hover { border-color: #fb8c00; background: #fff3e0; }
+        .rating-btn.easy:hover { border-color: #43a047; background: #e8f5e9; }
+
+        .rating-btn .stars { font-size: 14px; }
+        .rating-btn .tag-name { font-size: 13px; font-weight: 700; }
+        .rating-btn .desc { font-size: 11px; color: var(--text-muted); }
+
+        /* 日历看板页面 */
+        .calendar-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .month-switch {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .month-btn {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        .weekday-label {
+            text-align: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-muted);
+            padding-bottom: 8px;
+        }
+
+        .cal-cell {
+            min-height: 90px;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 6px 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .cal-cell:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .cal-cell.today {
+            border: 2px solid var(--primary);
+            background: #fffcfb;
+        }
+
+        .cal-date-num {
+            font-size: 12px;
+            font-weight: 700;
+            color: #555;
+        }
+
+        .cal-badges {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .cal-badge {
+            font-size: 10px;
+            padding: 2px 4px;
+            border-radius: 4px;
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .cal-badge.done {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .cal-badge.review-due {
+            background: #ffebee;
+            color: #c62828;
+            font-weight: 600;
+        }
+
+        /* 模态弹窗 (发音配置) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.45);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(2px);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-card {
+            background: #ffffff;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 20px;
+            padding: 24px 28px;
+            box-shadow: var(--shadow-md);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-header h3 {
+            font-size: 18px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            display: block;
+            color: var(--text-main);
+        }
+
+        .provider-radio-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .provider-radio-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: #fbf9f5;
+            cursor: pointer;
+        }
+
+        .provider-radio-card.active {
+            border-color: #0077cc;
+            background: #f0f7ff;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 13px;
+            outline: none;
+        }
+
+        .text-input:focus {
+            border-color: var(--primary);
+        }
+
+        .test-audio-bar {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            background: #fdfaf4;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px dashed var(--border-color);
+            margin-top: 10px;
+        }
+
+        /* 成功 Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #323232;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: none;
+            z-index: 2000;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部状态栏 -->
+    <header>
+        <div class="logo-area">
+            <div class="logo-icon">🌱</div>
+            <div class="logo-text">
+                <h1>小树苗练字记忆曲线 <span style="font-size: 11px; background: #ffebee; color: var(--primary); padding: 2px 6px; border-radius: 4px;">幼小衔接全栈版</span></h1>
+                <p>汉字米字格 · 数字日字格 · 拼音四线三格 · 艾宾浩斯科学抗遗忘</p>
+            </div>
+        </div>
+        <div class="header-actions">
+            <div class="voice-engine-badge" id="voiceBadgeBtn" onclick="openVoiceConfigModal()">
+                <span>🎙️</span> <span id="currentEngineText">发音源: 百度语音</span> ⚙️
+            </div>
+            <div class="stat-badge">
+                <span>🌟 坚持打卡:</span> <span id="streakCount">2</span> 天
+            </div>
+        </div>
+    </header>
+
+    <!-- 顶层视图切换 -->
+    <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchMainTab('practice')">✍️ 今日练字工作台</button>
+        <button class="tab-btn" onclick="switchMainTab('calendar')">📅 记忆日历看板</button>
+        <button class="tab-btn" onclick="openVoiceConfigModal()">⚙️ 发音库配置中心</button>
+    </div>
+
+    <!-- 主展示面板 -->
+    <main>
+        <!-- 视图 1：今日练字工作台 -->
+        <div id="practiceView" class="content-panel active">
+            <div class="workspace-grid">
+                
+                <!-- 左栏：任务列表与品类过滤 -->
+                <div class="task-sidebar">
+                    <div class="category-filter">
+                        <button class="filter-chip active" onclick="filterCategory('ALL')">全部待练</button>
+                        <button class="filter-chip" onclick="filterCategory('NUMBER')">🔢 数字(0-9)</button>
+                        <button class="filter-chip" onclick="filterCategory('PINYIN')">🔤 拼音</button>
+                        <button class="filter-chip" onclick="filterCategory('HANZI')">🀄 汉字</button>
+                        <button class="filter-chip" onclick="filterCategory('LETTER')">🅰️ 字母</button>
+                    </div>
+
+                    <div class="section-header">
+                        <span>今日需练清单 (<span id="taskCount">0</span>)</span>
+                        <span style="font-size: 11px; color: var(--primary);" id="todayDateStr">2026-10-17</span>
+                    </div>
+
+                    <div class="card-list" id="cardListContainer">
+                        <!-- 动态渲染卡片 -->
+                    </div>
+                </div>
+
+                <!-- 右栏：书写格、笔顺演示与打分反馈 -->
+                <div class="stage-card">
+                    <div class="stage-header">
+                        <div class="character-title">
+                            <h2 id="currentDisplayChar">2</h2>
+                            <span class="pinyin-tag" id="currentDisplayPinyin">èr</span>
+                            <span class="stage-pill due" id="currentStageBadge">复习阶段 1</span>
+                        </div>
+                        <button class="play-voice-btn" onclick="playCurrentVoice()">
+                            <span>🔊</span> 听读音
+                        </button>
+                    </div>
+
+                    <!-- 儿歌口诀 -->
+                    <div class="chant-banner">
+                        <div>
+                            <strong>💡 趣味口诀：</strong>
+                            <span id="currentChantText">2像小鸭水上漂，半圆弯弯平底横</span>
+                        </div>
+                        <button style="background:none; border:none; cursor:pointer; font-size:12px; color:#ff8f00; font-weight:700;" onclick="playChantVoice()">
+                            🗣️ 读口诀
+                        </button>
+                    </div>
+
+                    <!-- 书写格与演示区 -->
+                    <div class="writing-canvas-container">
+                        <div class="grid-wrapper" id="gridWrapper">
+                            <!-- 根据字符类型自适应网格 -->
+                            <div id="gridBackground" class="ri-zi-ge"></div>
+
+                            <!-- 笔顺 SVG 动画图层 -->
+                            <svg class="stroke-svg" id="strokeSvg" viewBox="0 0 200 240">
+                                <!-- 动态插入 path -->
+                            </svg>
+
+                            <!-- 导引光标 -->
+                            <div class="brush-cursor" id="brushCursor"></div>
+                        </div>
+
+                        <!-- 演示操作控制栏 -->
+                        <div class="demo-controls">
+                            <button class="action-btn primary" id="playDemoBtn" onclick="playStrokeDemo()">
+                                <span>🎬</span> 播放书写演示
+                            </button>
+                            <button class="action-btn" onclick="resetCanvas()">
+                                <span>🔄</span> 重置
+                            </button>
+                            <button class="action-btn" onclick="toggleSlowSpeech()">
+                                <span id="slowModeIcon">🐢</span> 0.75x 慢速跟读
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 运笔要领指引 -->
+                    <div class="hints-panel">
+                        <strong>✍️ 运笔要领：</strong>
+                        <div id="hintsText" style="margin-top: 4px;">右上格起笔画大圆弧，顺时针滑落至左下角，再向右拉出平底横。</div>
+                    </div>
+
+                    <!-- 3星闭环反馈 -->
+                    <div class="feedback-section">
+                        <div class="feedback-label">孩子书写反馈评价（提交后自动按艾宾浩斯更新排期）：</div>
+                        <div class="feedback-buttons">
+                            <button class="rating-btn hard" onclick="submitReview(1)">
+                                <span class="stars">★☆☆</span>
+                                <span class="tag-name">需重练 (太难)</span>
+                                <span class="desc">明天重新强化</span>
+                            </button>
+                            <button class="rating-btn good" onclick="submitReview(2)">
+                                <span class="stars">★★☆</span>
+                                <span class="tag-name">良好 (一般)</span>
+                                <span class="desc">进入下一阶段</span>
+                            </button>
+                            <button class="rating-btn easy" onclick="submitReview(3)">
+                                <span class="stars">★★★</span>
+                                <span class="tag-name">熟练 (太棒了)</span>
+                                <span class="desc">字形端正加倍顺延</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- 视图 2：记忆日历看板 -->
+        <div id="calendarView" class="content-panel">
+            <div class="calendar-card">
+                <div class="calendar-header">
+                    <div>
+                        <h2>📅 艾宾浩斯公历复习日历</h2>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">直观查看每天练了多少、哪天到期该复习，拒绝抽象 Day+N</p>
+                    </div>
+                    <div class="month-switch">
+                        <button class="month-btn" onclick="changeMonth(-1)">◀ 上个月</button>
+                        <strong id="calendarMonthTitle" style="font-size: 16px;">2026年10月</strong>
+                        <button class="month-btn" onclick="changeMonth(1)">下个月 ▶</button>
+                    </div>
+                </div>
+
+                <div class="calendar-grid">
+                    <div class="weekday-label">周日</div>
+                    <div class="weekday-label">周一</div>
+                    <div class="weekday-label">周二</div>
+                    <div class="weekday-label">周三</div>
+                    <div class="weekday-label">周四</div>
+                    <div class="weekday-label">周五</div>
+                    <div class="weekday-label">周六</div>
+                </div>
+
+                <div class="calendar-grid" id="calendarDaysGrid" style="margin-top: 8px;">
+                    <!-- 动态生成 35/42 个日期单元格 -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 发音配置模态弹窗 -->
+    <div class="modal-overlay" id="voiceModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>🎙️ 多源发音库配置中心</h3>
+                <button class="close-btn" onclick="closeVoiceConfigModal()">&times;</button>
+            </div>
+
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
+                您可以随时切换适合幼儿跟读的发音来源，支持百度高保真语音、有道真人发音或浏览器离线发音，系统重启后配置依然保留在 H2 数据库中。
+            </p>
+
+            <div class="form-group">
+                <label class="form-label">选择当前生效发音引擎：</label>
+                <div class="provider-radio-list" id="providerRadioList">
+                    <!-- 动态渲染 4 种 Provider -->
+                </div>
+            </div>
+
+            <div class="form-group" id="urlTemplateGroup">
+                <label class="form-label">API 模板 / URL 规则：</label>
+                <input type="text" class="text-input" id="apiUrlTemplateInput" placeholder="https://fanyi.baidu.com/gettts?lan={lang}&text={text}&spd=4&source=web">
+                <span style="font-size: 11px; color: #888;">支持占位符: {text} 文本, {lang} 语言代码 (zh/en), {speed} 语速</span>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">发音语速 (0.5x 慢速 ~ 1.2x 正常)：</label>
+                <input type="range" min="0.5" max="1.2" step="0.05" id="speedSlider" style="width: 100%;" oninput="document.getElementById('speedValLabel').innerText = this.value + 'x'">
+                <div style="font-size: 12px; color: var(--text-muted); text-align: right;" id="speedValLabel">0.75x</div>
+            </div>
+
+            <div class="test-audio-bar">
+                <input type="text" class="text-input" id="testTextInput" value="2" style="width: 120px;" placeholder="输入试听字词">
+                <button class="action-btn" onclick="testActiveVoice()">
+                    <span>🔊</span> 试听测试
+                </button>
+                <span id="testAudioStatus" style="font-size: 12px; color: var(--accent);"></span>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                <button class="action-btn" onclick="closeVoiceConfigModal()">取消</button>
+                <button class="action-btn primary" onclick="saveVoiceConfig()">保存配置并生效</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部轻提示 -->
+    <div class="toast" id="toastMsg">打卡成功！已更新下一次复习排期！</div>
+
+    <!-- 交互脚本 -->
+    <script>
+        // 全局状态
+        let currentCategory = 'ALL';
+        let allCards = [];
+        let activeCard = null;
+        let isSlowSpeech = true;
+        let voiceConfigs = [];
+        let activeVoiceConfig = null;
+        let currentYearMonth = '2026-10';
+
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', async () => {
+            await fetchVoiceConfigs();
+            await loadTodayTasks();
+            renderCalendar(currentYearMonth);
+        });
+
+        // 1. 获取发音配置
+        async function fetchVoiceConfigs() {
+            try {
+                const res = await fetch('/api/voice/configs');
+                if (res.ok) {
+                    voiceConfigs = await res.json();
+                    activeVoiceConfig = voiceConfigs.find(c => c.isActive) || voiceConfigs[0];
+                    updateVoiceBadgeUI();
+                }
+            } catch (err) {
+                console.warn('Backend voice config fetch failed, using fallback web_speech', err);
+                activeVoiceConfig = { providerType: 'WEB_SPEECH', providerName: '浏览器原生离线语音' };
+                updateVoiceBadgeUI();
+            }
+        }
+
+        function updateVoiceBadgeUI() {
+            if (activeVoiceConfig) {
+                document.getElementById('currentEngineText').innerText = '发音源: ' + activeVoiceConfig.providerName;
+            }
+        }
+
+        // 2. 加载今日任务列表
+        async function loadTodayTasks() {
+            try {
+                const res = await fetch('/api/cards/today?date=2026-10-17');
+                if (res.ok) {
+                    const data = await res.json();
+                    document.getElementById('todayDateStr').innerText = data.todayDate || '2026-10-17';
+                    // 聚合新学与待复习卡片
+                    const list = [];
+                    if (data.reviewCards) list.push(...data.reviewCards);
+                    if (data.newCards) {
+                        data.newCards.forEach(c => {
+                            if (!list.some(item => item.id === c.id)) list.push(c);
+                        });
+                    }
+                    allCards = list;
+                    renderCardList();
+                    if (allCards.length > 0 && !activeCard) {
+                        selectCard(allCards[0]);
+                    }
+                }
+            } catch (err) {
+                console.error('Failed to load today tasks', err);
+            }
+        }
+
+        // 3. 渲染左侧卡片列表
+        function renderCardList() {
+            const container = document.getElementById('cardListContainer');
+            container.innerHTML = '';
+
+            const filtered = allCards.filter(c => {
+                if (currentCategory === 'ALL') return true;
+                return c.category === currentCategory;
+            });
+
+            document.getElementById('taskCount').innerText = filtered.length;
+
+            filtered.forEach(c => {
+                const item = document.createElement('div');
+                item.className = 'character-card' + (activeCard && activeCard.id === c.id ? ' active' : '');
+                item.onclick = () => selectCard(c);
+
+                let avatarClass = 'char-avatar';
+                if (c.category === 'NUMBER') avatarClass += ' number-avatar';
+                if (c.category === 'PINYIN') avatarClass += ' pinyin-avatar';
+
+                const stageText = c.stage === 0 ? '新学' : ('复习 ' + c.stage);
+                const isDue = c.stage > 0;
+
+                item.innerHTML = `
+                    <div class="card-left">
+                        <div class="${avatarClass}">${c.characterVal}</div>
+                        <div class="char-meta">
+                            <h3>${c.characterVal} <small style="font-size:12px; font-weight:normal; color:#888;">${c.pinyin || ''}</small></h3>
+                            <span>${c.chant ? c.chant.slice(0, 10) + '...' : '经典练字'}</span>
+                        </div>
+                    </div>
+                    <span class="stage-pill ${isDue ? 'due' : ''}">${stageText}</span>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        // 4. 选中卡片并渲染工作台
+        function selectCard(card) {
+            activeCard = card;
+            renderCardList();
+
+            document.getElementById('currentDisplayChar').innerText = card.characterVal;
+            document.getElementById('currentDisplayPinyin').innerText = card.pinyin || '';
+            document.getElementById('currentStageBadge').innerText = card.stage === 0 ? '初学打卡' : ('复习阶段 ' + card.stage);
+            document.getElementById('currentChantText').innerText = card.chant || '标准笔画练习';
+
+            // 自适应网格
+            const gridBg = document.getElementById('gridBackground');
+            gridBg.className = '';
+            if (card.gridType === 'RI_ZI_GE') {
+                gridBg.className = 'ri-zi-ge';
+            } else if (card.gridType === 'FOUR_LINE') {
+                gridBg.className = 'four-line-grid';
+                gridBg.innerHTML = `
+                    <div class="line-slot">上格</div>
+                    <div class="line-slot slot-middle">中格 (主要身体)</div>
+                    <div class="line-slot">下格</div>
+                `;
+            } else {
+                gridBg.className = 'mi-zi-ge';
+                gridBg.innerHTML = '';
+            }
+
+            // 笔画要领
+            let hints = [];
+            try {
+                hints = typeof card.strokeHints === 'string' ? JSON.parse(card.strokeHints) : (card.strokeHints || []);
+            } catch (e) {
+                hints = [card.strokeHints || '仔细观察起笔与收笔位置'];
+            }
+            document.getElementById('hintsText').innerHTML = hints.map((h, i) => `<div>第${i+1}笔：${h}</div>`).join('');
+
+            // 重置 SVG
+            setupStrokesSvg(card);
+        }
+
+        // 5. 初始化 SVG 笔画
+        function setupStrokesSvg(card) {
+            const svg = document.getElementById('strokeSvg');
+            svg.innerHTML = '';
+            let paths = [];
+            try {
+                paths = typeof card.strokePaths === 'string' ? JSON.parse(card.strokePaths) : (card.strokePaths || []);
+            } catch (e) {
+                paths = [];
+            }
+
+            paths.forEach((d, idx) => {
+                const pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                pathEl.setAttribute('d', d);
+                pathEl.setAttribute('class', 'stroke-path');
+                pathEl.setAttribute('id', `stroke-${idx}`);
+                svg.appendChild(pathEl);
+            });
+        }
+
+        // 6. 播放书写演示动画
+        let isAnimating = false;
+        async function playStrokeDemo() {
+            if (isAnimating || !activeCard) return;
+            isAnimating = true;
+            document.getElementById('playDemoBtn').disabled = true;
+
+            const cursor = document.getElementById('brushCursor');
+            cursor.style.display = 'block';
+
+            let paths = [];
+            try {
+                paths = typeof activeCard.strokePaths === 'string' ? JSON.parse(activeCard.strokePaths) : [];
+            } catch (e) { paths = []; }
+
+            // 恢复所有笔画为隐藏状态准备顺次播放
+            paths.forEach((_, idx) => {
+                const p = document.getElementById(`stroke-${idx}`);
+                if (p) {
+                    const len = p.getTotalLength();
+                    p.style.strokeDasharray = len;
+                    p.style.strokeDashoffset = len;
+                }
+            });
+
+            for (let i = 0; i < paths.length; i++) {
+                const p = document.getElementById(`stroke-${i}`);
+                if (!p) continue;
+
+                const totalLength = p.getTotalLength();
+                const duration = 900; // 毫秒
+                const start = performance.now();
+
+                await new Promise(resolve => {
+                    function step(now) {
+                        const elapsed = now - start;
+                        const progress = Math.min(elapsed / duration, 1);
+                        p.style.strokeDashoffset = totalLength * (1 - progress);
+
+                        // 光标循迹
+                        const pt = p.getPointAtLength(totalLength * progress);
+                        cursor.style.left = pt.x + 'px';
+                        cursor.style.top = pt.y + 'px';
+
+                        if (progress < 1) {
+                            requestAnimationFrame(step);
+                        } else {
+                            setTimeout(resolve, 150);
+                        }
+                    }
+                    requestAnimationFrame(step);
+                });
+            }
+
+            cursor.style.display = 'none';
+            isAnimating = false;
+            document.getElementById('playDemoBtn').disabled = false;
+        }
+
+        function resetCanvas() {
+            if (activeCard) selectCard(activeCard);
+        }
+
+        // 7. 发音逻辑 (多源驱动 + 离线降级)
+        async function playCurrentVoice() {
+            if (!activeCard) return;
+            speakText(activeCard.characterVal, activeCard.category);
+        }
+
+        async function playChantVoice() {
+            if (!activeCard || !activeCard.chant) return;
+            speakText(activeCard.chant, activeCard.category);
+        }
+
+        async function speakText(text, category) {
+            const provider = activeVoiceConfig ? activeVoiceConfig.providerType : 'WEB_SPEECH';
+
+            if (provider === 'WEB_SPEECH') {
+                // 浏览器原生 Web Speech API 慢速发音
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const utter = new SpeechSynthesisUtterance(text);
+                    utter.lang = category === 'LETTER' ? 'en-US' : 'zh-CN';
+                    utter.rate = isSlowSpeech ? 0.75 : 1.0;
+                    utter.pitch = 1.15;
+                    window.speechSynthesis.speak(utter);
+                }
+            } else {
+                // 服务端百度/有道/自定义音频流
+                try {
+                    const audio = new Audio(`/api/voice/synthesize?text=${encodeURIComponent(text)}&category=${category || 'HANZI'}`);
+                    await audio.play();
+                } catch (err) {
+                    console.warn('Network audio failed, falling back to local SpeechSynthesis', err);
+                    const utter = new SpeechSynthesisUtterance(text);
+                    utter.rate = 0.75;
+                    window.speechSynthesis.speak(utter);
+                }
+            }
+        }
+
+        function toggleSlowSpeech() {
+            isSlowSpeech = !isSlowSpeech;
+            const icon = document.getElementById('slowModeIcon');
+            icon.innerText = isSlowSpeech ? '🐢' : '🐇';
+            showToast(isSlowSpeech ? '已开启 0.75x 慢速跟读模式' : '已恢复标准语速');
+        }
+
+        // 8. 提交打卡与 SM-2 阶段自适应
+        async function submitReview(rating) {
+            if (!activeCard) return;
+            try {
+                const res = await fetch('/api/cards/review?date=2026-10-17', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ cardId: activeCard.id, rating: rating })
+                });
+
+                if (res.ok) {
+                    const updated = await res.json();
+                    showToast(`【${updated.characterVal}】打卡成功！下次复习: ${updated.nextReviewDate}`);
+                    // 重新刷新列表和日历
+                    await loadTodayTasks();
+                    renderCalendar(currentYearMonth);
+                }
+            } catch (err) {
+                console.error('Submit review error', err);
+                showToast('打卡提交失败，请检查服务连接');
+            }
+        }
+
+        // 9. 记忆日历渲染
+        async function renderCalendar(yearMonth) {
+            document.getElementById('calendarMonthTitle').innerText = yearMonth.replace('-', '年') + '月';
+            const grid = document.getElementById('calendarDaysGrid');
+            grid.innerHTML = '';
+
+            let summaryMap = {};
+            try {
+                const res = await fetch(`/api/calendar/summary?yearMonth=${yearMonth}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    summaryMap = data.daySummaries || {};
+                }
+            } catch (e) {
+                console.warn('Calendar summary fetch error', e);
+            }
+
+            // 计算该月第一天星期几和总天数
+            const [y, m] = yearMonth.split('-').map(Number);
+            const firstDay = new Date(y, m - 1, 1).getDay();
+            const daysInMonth = new Date(y, m, 0).getDate();
+
+            // 填充空白前置格子
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'cal-cell';
+                emptyCell.style.opacity = '0.3';
+                emptyCell.style.background = '#fcfbfa';
+                grid.appendChild(emptyCell);
+            }
+
+            // 填充日期格子
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dateStr = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                const cell = document.createElement('div');
+                cell.className = 'cal-cell' + (dateStr === '2026-10-17' ? ' today' : '');
+
+                const dayData = summaryMap[dateStr] || { practicedCount: 0, scheduledReviewCount: 0, characters: [] };
+
+                let badgeHtml = '';
+                if (dayData.practicedCount > 0) {
+                    badgeHtml += `<span class="cal-badge done">✔ 已练 ${dayData.practicedCount} 个</span>`;
+                }
+                if (dayData.scheduledReviewCount > 0) {
+                    badgeHtml += `<span class="cal-badge review-due">⏰ 复习 ${dayData.scheduledReviewCount} 个</span>`;
+                }
+
+                cell.innerHTML = `
+                    <div class="cal-date-num">${d}</div>
+                    <div class="cal-badges">
+                        ${badgeHtml}
+                    </div>
+                `;
+                cell.onclick = () => {
+                    if (dayData.characters && dayData.characters.length > 0) {
+                        showToast(`${dateStr} 安排: ${dayData.characters.join('、')}`);
+                    }
+                };
+                grid.appendChild(cell);
+            }
+        }
+
+        function changeMonth(delta) {
+            const [y, m] = currentYearMonth.split('-').map(Number);
+            let newM = m + delta;
+            let newY = y;
+            if (newM > 12) { newM = 1; newY++; }
+            if (newM < 1) { newM = 12; newY--; }
+            currentYearMonth = `${newY}-${String(newM).padStart(2, '0')}`;
+            renderCalendar(currentYearMonth);
+        }
+
+        // 10. 品类切换
+        function filterCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.filter-chip').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderCardList();
+        }
+
+        // 11. 顶部 Tab 切换
+        function switchMainTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+
+            document.getElementById('practiceView').classList.remove('active');
+            document.getElementById('calendarView').classList.remove('active');
+
+            if (tab === 'practice') {
+                document.getElementById('practiceView').classList.add('active');
+            } else if (tab === 'calendar') {
+                document.getElementById('calendarView').classList.add('active');
+            }
+        }
+
+        // 12. 发音配置模态框交互
+        function openVoiceConfigModal() {
+            const container = document.getElementById('providerRadioList');
+            container.innerHTML = '';
+
+            voiceConfigs.forEach(conf => {
+                const card = document.createElement('div');
+                card.className = 'provider-radio-card' + (conf.isActive ? ' active' : '');
+                card.onclick = () => selectVoiceProviderRadio(conf.providerType);
+                card.innerHTML = `
+                    <input type="radio" name="providerTypeRadio" value="${conf.providerType}" ${conf.isActive ? 'checked' : ''}>
+                    <div>
+                        <div style="font-size:14px; font-weight:700;">${conf.providerName}</div>
+                        <div style="font-size:12px; color:var(--text-muted);">${conf.providerType === 'BAIDU_TTS' ? '高质百度语音，自然流畅' : conf.providerType === 'YOUDAO_VOICE' ? '网易真人原声音频' : conf.providerType === 'WEB_SPEECH' ? '免网络、离线无延迟' : '自定义第三方 TTS 开放接口'}</div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            if (activeVoiceConfig) {
+                document.getElementById('apiUrlTemplateInput').value = activeVoiceConfig.apiUrlTemplate || '';
+                document.getElementById('speedSlider').value = activeVoiceConfig.speed || 0.75;
+                document.getElementById('speedValLabel').innerText = (activeVoiceConfig.speed || 0.75) + 'x';
+            }
+
+            document.getElementById('voiceModal').classList.add('active');
+        }
+
+        function closeVoiceConfigModal() {
+            document.getElementById('voiceModal').classList.remove('active');
+        }
+
+        function selectVoiceProviderRadio(type) {
+            document.querySelectorAll('.provider-radio-card').forEach(c => c.classList.remove('active'));
+            const radio = document.querySelector(`input[name="providerTypeRadio"][value="${type}"]`);
+            if (radio) {
+                radio.checked = true;
+                radio.closest('.provider-radio-card').classList.add('active');
+            }
+            const found = voiceConfigs.find(c => c.providerType === type);
+            if (found) {
+                document.getElementById('apiUrlTemplateInput').value = found.apiUrlTemplate || '';
+            }
+        }
+
+        async function saveVoiceConfig() {
+            const selectedRadio = document.querySelector('input[name="providerTypeRadio"]:checked');
+            if (!selectedRadio) return;
+
+            const providerType = selectedRadio.value;
+            const apiUrlTemplate = document.getElementById('apiUrlTemplateInput').value;
+            const speed = parseFloat(document.getElementById('speedSlider').value);
+
+            try {
+                // 切换激活状态
+                await fetch(`/api/voice/active/${providerType}`, { method: 'PUT' });
+                // 更新配置详情
+                await fetch('/api/voice/configs', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        providerType: providerType,
+                        apiUrlTemplate: apiUrlTemplate,
+                        speed: speed,
+                        isActive: true
+                    })
+                });
+
+                showToast('发音引擎配置已成功保存！');
+                closeVoiceConfigModal();
+                await fetchVoiceConfigs();
+            } catch (err) {
+                console.error('Failed to save voice config', err);
+                showToast('保存发音配置失败');
+            }
+        }
+
+        async function testActiveVoice() {
+            const text = document.getElementById('testTextInput').value || '2';
+            const statusEl = document.getElementById('testAudioStatus');
+            statusEl.innerText = '正在播放...';
+
+            const selectedRadio = document.querySelector('input[name="providerTypeRadio"]:checked');
+            const providerType = selectedRadio ? selectedRadio.value : 'WEB_SPEECH';
+
+            if (providerType === 'WEB_SPEECH') {
+                const utter = new SpeechSynthesisUtterance(text);
+                utter.rate = 0.75;
+                utter.onend = () => { statusEl.innerText = '试听完毕 ✔'; };
+                window.speechSynthesis.speak(utter);
+            } else {
+                try {
+                    const audio = new Audio(`/api/voice/synthesize?text=${encodeURIComponent(text)}&category=NUMBER`);
+                    audio.onended = () => { statusEl.innerText = '试听完毕 ✔'; };
+                    await audio.play();
+                } catch (e) {
+                    statusEl.innerText = '播放异常，请检查URL';
+                }
+            }
+        }
+
+        // 13. Toast 提示
+        function showToast(msg) {
+            const toast = document.getElementById('toastMsg');
+            toast.innerText = msg;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 2800);
+        }
+    </script>
+</body>
+</html>
