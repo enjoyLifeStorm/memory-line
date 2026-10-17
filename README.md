@@ -91,5 +91,8 @@ java -jar target/memory-line-1.0.0.jar
 
 ---
 
-## 📄 开源许可证
-本项目遵循 MIT 协议开源。
+## 📄 版权声明
+
+Copyright © 2026 congwu.lei. All Rights Reserved.
+
+本项目代码与文档**版权归作者所有，保留一切权利**。未经作者明确书面授权，任何人不得以任何形式复制、修改、分发、商用或二次发布本项目的任何部分。
