@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  memory-line:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: memory-line:1.0.0
+    container_name: memory-line
+    restart: unless-stopped
+    user: "10001:10001"
+    environment:
+      - TZ=Asia/Shanghai
+      - SPRING_PROFILES_ACTIVE=prod
+      - JAVA_OPTS=-Xms256m -Xmx512m -Dfile.encoding=UTF-8 -Duser.timezone=Asia/Shanghai
+    volumes:
+      # H2 数据库持久化目录（务必持久化，保证重启数据不丢失）
+      - ./data:/app/temp/data
+      - ./logs:/app/temp/logs
+    networks:
+      - traefik-net
+    labels:
+      - "traefik.enable=true"
+      # 二级域名路由规则：优先从 .env 读取 DOMAIN，默认 line.yourdomain.com
+      - "traefik.http.routers.memoryline.rule=Host(`${DOMAIN:-line.yourdomain.com}`)"
+      - "traefik.http.routers.memoryline.entrypoints=websecure"
+      - "traefik.http.routers.memoryline.tls=true"
+      # 若您的 Traefik 开启了自动证书解析器 (CertResolver)，请取消下一行注释并修改为您的解析器名称
+      # - "traefik.http.routers.memoryline.tls.certresolver=letsencrypt"
+      - "traefik.http.services.memoryline.loadbalancer.server.port=8088"
+
+networks:
+  traefik-net:
+    # 接入宿主机已有的 Traefik 外部 Docker 网络
+    external: true
+    # 若您的 Traefik 网络名称是其他名字 (例如 web、traefik_default 等)，可在此指定
+    name: ${TRAEFIK_NETWORK:-traefik-net}

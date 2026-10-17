@@ -3,6 +3,13 @@ temp/
 *.log
 *.class
 
+# 生产环境配置 (含域名等敏感信息，不入库)
+.env
+
+# 服务器生产数据与日志持久化目录
+data/
+logs/
+
 # IDE
 .idea/
 *.iml
