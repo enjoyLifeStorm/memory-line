@@ -36,7 +36,7 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            background-image: 
+            background-image:
                 radial-gradient(circle at 10% 20%, rgba(196, 71, 58, 0.03) 0%, transparent 20%),
                 radial-gradient(circle at 90% 80%, rgba(46, 125, 50, 0.03) 0%, transparent 20%);
         }
@@ -45,7 +45,7 @@
         header {
             background: #ffffff;
             border-bottom: 2px solid var(--border-color);
-            padding: 14px 28px;
+            padding: 12px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -62,7 +62,7 @@
         }
 
         .logo-icon {
-            font-size: 30px;
+            font-size: 28px;
             background: var(--primary-light);
             padding: 6px 10px;
             border-radius: 12px;
@@ -70,10 +70,9 @@
         }
 
         .logo-text h1 {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             color: var(--primary);
-            letter-spacing: 0.5px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -87,7 +86,7 @@
         .header-actions {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
         }
 
         .voice-engine-badge {
@@ -107,7 +106,6 @@
 
         .voice-engine-badge:hover {
             background: #e1efff;
-            box-shadow: 0 2px 6px rgba(0, 102, 204, 0.15);
         }
 
         .stat-badge {
@@ -115,7 +113,7 @@
             color: var(--accent);
             padding: 6px 14px;
             border-radius: 20px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             display: flex;
             align-items: center;
@@ -160,9 +158,9 @@
 
         /* 主容器 */
         main {
-            max-width: 1100px;
+            max-width: 1120px;
             width: 100%;
-            margin: 20px auto;
+            margin: 16px auto;
             padding: 0 16px 40px;
             flex: 1;
         }
@@ -173,25 +171,85 @@
 
         .content-panel.active {
             display: block;
-            animation: fadeIn 0.3s ease;
+            animation: fadeIn 0.25s ease;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
+            from { opacity: 0; transform: translateY(4px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 今日概览横幅 (常驻但不阻挡工作台) */
+        .daily-overview-banner {
+            background: #ffffff;
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .overview-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .overview-title h2 {
+            font-size: 16px;
+            color: var(--text-main);
+        }
+
+        .overview-counts {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .count-pill {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .count-pill.review {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+
+        .count-pill.new {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        .count-pill.done {
+            background: #fff8e1;
+            color: #f57f17;
+            border: 1px solid #ffe082;
         }
 
         /* 工作台双栏布局 */
         .workspace-grid {
             display: grid;
-            grid-template-columns: 360px 1fr;
-            gap: 24px;
+            grid-template-columns: 320px minmax(0, 1fr);
+            gap: 20px;
             align-items: start;
         }
 
         @media (max-width: 860px) {
             .workspace-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: minmax(0, 1fr);
             }
         }
 
@@ -199,7 +257,7 @@
         .task-sidebar {
             background: var(--card-bg);
             border-radius: var(--radius-md);
-            padding: 20px;
+            padding: 18px;
             box-shadow: var(--shadow-sm);
             border: 1px solid var(--border-color);
         }
@@ -207,14 +265,15 @@
         .category-filter {
             display: flex;
             gap: 6px;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
             border-bottom: 1px dashed var(--border-color);
             overflow-x: auto;
+            flex-wrap: wrap;
         }
 
         .filter-chip {
-            padding: 5px 12px;
+            padding: 6px 12px;
             border-radius: 12px;
             font-size: 12px;
             font-weight: 600;
@@ -222,30 +281,31 @@
             background: #fbf9f5;
             cursor: pointer;
             white-space: nowrap;
+            transition: all 0.15s;
         }
 
         .filter-chip.active {
-            background: var(--primary-light);
-            color: var(--primary);
+            background: var(--primary);
+            color: #ffffff;
             border-color: var(--primary);
+            box-shadow: 0 2px 6px rgba(196, 71, 58, 0.2);
         }
 
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             font-size: 13px;
             font-weight: 700;
             color: var(--text-muted);
-            text-transform: uppercase;
         }
 
         .card-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            max-height: 480px;
+            gap: 8px;
+            max-height: 520px;
             overflow-y: auto;
             padding-right: 4px;
         }
@@ -254,44 +314,47 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 14px;
+            padding: 10px 12px;
             border-radius: 12px;
             border: 1px solid var(--border-color);
             background: #ffffff;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.15s;
         }
 
         .character-card:hover {
             border-color: var(--primary);
-            transform: translateX(4px);
+            transform: translateX(2px);
             box-shadow: var(--shadow-sm);
         }
 
         .character-card.active {
             border-color: var(--primary);
             background: var(--primary-light);
+            border-width: 2px;
         }
 
         .card-left {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+            min-width: 0;
         }
 
         .char-avatar {
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
             font-family: 'Ma Shan Zheng', 'Noto Sans SC', serif;
             background: #fdfaf4;
             border-radius: 8px;
             border: 1px solid #ebdccb;
             color: var(--primary);
+            flex-shrink: 0;
         }
 
         .char-avatar.number-avatar {
@@ -308,14 +371,23 @@
             border-color: #dcedc8;
         }
 
+        .char-meta {
+            min-width: 0;
+        }
+
         .char-meta h3 {
-            font-size: 16px;
+            font-size: 15px;
             margin-bottom: 2px;
+            overflow-wrap: anywhere;
         }
 
         .char-meta span {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .stage-pill {
@@ -325,6 +397,7 @@
             font-weight: 600;
             background: #eee8de;
             color: #635b51;
+            flex-shrink: 0;
         }
 
         .stage-pill.due {
@@ -337,7 +410,7 @@
         .stage-card {
             background: var(--card-bg);
             border-radius: var(--radius-md);
-            padding: 24px;
+            padding: 22px;
             box-shadow: var(--shadow-md);
             border: 1px solid var(--border-color);
             position: relative;
@@ -347,7 +420,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .character-title {
@@ -357,7 +432,7 @@
         }
 
         .character-title h2 {
-            font-size: 38px;
+            font-size: 42px;
             font-family: 'Ma Shan Zheng', 'Noto Sans SC', serif;
             color: var(--primary);
             line-height: 1;
@@ -369,11 +444,17 @@
             font-weight: 600;
         }
 
+        .stage-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         .play-voice-btn {
             background: var(--primary-light);
             border: 1px solid var(--primary);
             color: var(--primary);
-            padding: 6px 14px;
+            padding: 7px 16px;
             border-radius: 20px;
             font-size: 13px;
             font-weight: 600;
@@ -381,7 +462,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            transition: all 0.2s;
+            transition: all 0.15s;
         }
 
         .play-voice-btn:hover {
@@ -389,18 +470,29 @@
             color: #ffffff;
         }
 
+        .lesson-info-bar {
+            background: #fdfaf4;
+            color: #635b51;
+            font-size: 12px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border: 1px solid #ede4d5;
+        }
+
         /* 口诀童谣横幅 */
         .chant-banner {
             background: #fff9e6;
             border-left: 4px solid #ffb300;
-            padding: 10px 16px;
+            padding: 10px 14px;
             border-radius: 0 8px 8px 0;
-            margin-bottom: 20px;
-            font-size: 14px;
+            margin-bottom: 16px;
+            font-size: 13px;
             color: #795548;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 8px;
         }
 
         /* 书写大格展示区 */
@@ -408,8 +500,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 16px;
-            padding: 16px 0;
+            gap: 14px;
+            padding: 18px 0;
             background: #fbfaf7;
             border-radius: 16px;
             border: 1px dashed var(--border-color);
@@ -419,64 +511,21 @@
         .grid-wrapper {
             position: relative;
             background: #ffffff;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.05);
             border-radius: 8px;
             overflow: hidden;
+            width: min(280px, 90vw);
+            aspect-ratio: 1;
         }
 
-        /* 米字格 */
-        .mi-zi-ge {
-            width: 240px;
-            height: 240px;
-            border: 2px solid #d9534f;
-            position: relative;
-            background-color: #fffefb;
-            background-image: 
-                linear-gradient(to right, transparent 49.5%, rgba(217, 83, 79, 0.35) 49.5%, rgba(217, 83, 79, 0.35) 50.5%, transparent 50.5%),
-                linear-gradient(to bottom, transparent 49.5%, rgba(217, 83, 79, 0.35) 49.5%, rgba(217, 83, 79, 0.35) 50.5%, transparent 50.5%),
-                linear-gradient(45deg, transparent 49.5%, rgba(217, 83, 79, 0.2) 49.5%, rgba(217, 83, 79, 0.2) 50.5%, transparent 50.5%),
-                linear-gradient(-45deg, transparent 49.5%, rgba(217, 83, 79, 0.2) 49.5%, rgba(217, 83, 79, 0.2) 50.5%, transparent 50.5%);
+        .grid-wrapper[data-grid="number"] {
+            width: min(200px, 75vw);
+            aspect-ratio: 2 / 3;
         }
 
-        /* 日字格 (数字专用，带倾斜与腰线) */
-        .ri-zi-ge {
-            width: 180px;
-            height: 260px;
-            border: 2px solid #0077cc;
-            position: relative;
-            background-color: #fdfefe;
-            background-image: 
-                linear-gradient(to bottom, transparent 49.5%, rgba(0, 119, 204, 0.3) 49.5%, rgba(0, 119, 204, 0.3) 50.5%, transparent 50.5%),
-                linear-gradient(83deg, transparent 49.5%, rgba(0, 119, 204, 0.25) 49.5%, rgba(0, 119, 204, 0.25) 50.5%, transparent 50.5%);
-        }
-
-        /* 四线三格 (拼音/英文字母专用) */
-        .four-line-grid {
-            width: 260px;
-            height: 220px;
-            border: 2px solid #2e7d32;
-            position: relative;
-            background: #fff;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .four-line-grid .line-slot {
-            flex: 1;
-            border-bottom: 1.5px dashed rgba(46, 125, 50, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            color: rgba(46, 125, 50, 0.4);
-        }
-
-        .four-line-grid .line-slot:last-child {
-            border-bottom: none;
-        }
-
-        .four-line-grid .slot-middle {
-            background: rgba(255, 249, 196, 0.45);
+        .grid-wrapper[data-grid="fourline"] {
+            width: min(340px, 92vw);
+            aspect-ratio: 4 / 3;
         }
 
         /* 笔画 SVG 容器 */
@@ -486,41 +535,49 @@
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
+        }
+
+        .stroke-guide {
+            fill: none;
+            stroke: #d0c8be;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            opacity: 0.35;
         }
 
         .stroke-path {
             fill: none;
             stroke: #2c2925;
-            stroke-width: 14;
             stroke-linecap: round;
             stroke-linejoin: round;
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 0;
-            transition: stroke-dashoffset 0.8s ease-in-out;
+            transition: none;
         }
 
-        /* 运笔光标点 */
+        /* 运笔光标红点 */
         .brush-cursor {
-            position: absolute;
-            width: 18px;
-            height: 18px;
-            background: #ff3b30;
-            border: 2px solid #ffffff;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 10px rgba(255, 59, 48, 0.8);
+            fill: #ff3b30;
+            stroke: #ffffff;
+            stroke-width: 2;
+            filter: drop-shadow(0 0 4px rgba(255, 59, 48, 0.8));
             display: none;
-            z-index: 10;
+            pointer-events: none;
+        }
+
+        .demo-status {
+            font-size: 12px;
+            color: var(--text-muted);
+            min-height: 18px;
+            text-align: center;
         }
 
         /* 笔顺演示控制栏 */
         .demo-controls {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             width: 100%;
             justify-content: center;
+            flex-wrap: wrap;
         }
 
         .action-btn {
@@ -531,13 +588,13 @@
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 6px;
-            transition: all 0.2s;
+            transition: all 0.15s;
         }
 
-        .action-btn:hover {
+        .action-btn:hover:not(:disabled) {
             border-color: var(--primary);
             color: var(--primary);
             box-shadow: var(--shadow-sm);
@@ -549,13 +606,18 @@
             border-color: var(--primary);
         }
 
-        .action-btn.primary:hover {
+        .action-btn.primary:hover:not(:disabled) {
             background: var(--primary-hover);
+        }
+
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         /* 笔画指引要点提示 */
         .hints-panel {
-            margin-top: 16px;
+            margin-top: 14px;
             padding: 12px 16px;
             background: #fdfaf4;
             border-radius: 12px;
@@ -565,32 +627,71 @@
             line-height: 1.6;
         }
 
+        .hints-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .hint-step {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 6px 0;
+            border-bottom: 1px dashed #ede4d5;
+        }
+
+        .hint-step:last-child {
+            border-bottom: none;
+        }
+
+        .hint-step.current {
+            background: #fff3e0;
+            padding: 6px 8px;
+            border-radius: 6px;
+        }
+
+        .hint-read-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
         /* 即时反馈打分 */
         .feedback-section {
-            margin-top: 20px;
-            padding-top: 18px;
+            margin-top: 18px;
+            padding-top: 16px;
             border-top: 1px dashed var(--border-color);
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         .feedback-label {
             font-size: 13px;
-            font-weight: 600;
-            color: var(--text-muted);
+            font-weight: 700;
+            color: var(--text-main);
         }
 
         .feedback-buttons {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             width: 100%;
         }
 
         .rating-btn {
             flex: 1;
-            padding: 12px 10px;
+            padding: 12px 8px;
             border-radius: 12px;
             border: 1px solid var(--border-color);
             background: #ffffff;
@@ -599,17 +700,17 @@
             flex-direction: column;
             align-items: center;
             gap: 4px;
-            transition: all 0.2s;
+            transition: all 0.15s;
         }
 
-        .rating-btn:hover {
+        .rating-btn:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: var(--shadow-sm);
         }
 
-        .rating-btn.hard:hover { border-color: #e53935; background: #ffebee; }
-        .rating-btn.good:hover { border-color: #fb8c00; background: #fff3e0; }
-        .rating-btn.easy:hover { border-color: #43a047; background: #e8f5e9; }
+        .rating-btn.hard:hover:not(:disabled) { border-color: #e53935; background: #ffebee; }
+        .rating-btn.good:hover:not(:disabled) { border-color: #fb8c00; background: #fff3e0; }
+        .rating-btn.easy:hover:not(:disabled) { border-color: #43a047; background: #e8f5e9; }
 
         .rating-btn .stars { font-size: 14px; }
         .rating-btn .tag-name { font-size: 13px; font-weight: 700; }
@@ -619,7 +720,7 @@
         .calendar-card {
             background: var(--card-bg);
             border-radius: var(--radius-md);
-            padding: 24px;
+            padding: 22px;
             box-shadow: var(--shadow-sm);
             border: 1px solid var(--border-color);
         }
@@ -628,7 +729,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            gap: 12px;
         }
 
         .month-switch {
@@ -643,33 +746,34 @@
             padding: 6px 12px;
             border-radius: 8px;
             cursor: pointer;
+            font-size: 13px;
         }
 
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 8px;
+            gap: 6px;
         }
 
         .weekday-label {
             text-align: center;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             color: var(--text-muted);
-            padding-bottom: 8px;
+            padding-bottom: 6px;
         }
 
         .cal-cell {
-            min-height: 90px;
+            min-height: 84px;
             background: #ffffff;
             border: 1px solid var(--border-color);
             border-radius: 10px;
-            padding: 6px 8px;
+            padding: 6px 6px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.15s;
         }
 
         .cal-cell:hover {
@@ -691,7 +795,7 @@
         .cal-badges {
             display: flex;
             flex-direction: column;
-            gap: 3px;
+            gap: 2px;
         }
 
         .cal-badge {
@@ -737,7 +841,7 @@
         .modal-card {
             background: #ffffff;
             width: 90%;
-            max-width: 600px;
+            max-width: 580px;
             border-radius: 20px;
             padding: 24px 28px;
             box-shadow: var(--shadow-md);
@@ -749,17 +853,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             padding-bottom: 12px;
             border-bottom: 1px solid var(--border-color);
-        }
-
-        .modal-header h3 {
-            font-size: 18px;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .close-btn {
@@ -771,7 +867,7 @@
         }
 
         .form-group {
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
         .form-label {
@@ -779,21 +875,20 @@
             font-weight: 700;
             margin-bottom: 6px;
             display: block;
-            color: var(--text-main);
         }
 
         .provider-radio-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-bottom: 16px;
+            gap: 8px;
+            margin-bottom: 14px;
         }
 
         .provider-radio-card {
             display: flex;
             align-items: flex-start;
             gap: 12px;
-            padding: 12px;
+            padding: 10px 12px;
             border-radius: 10px;
             border: 1px solid var(--border-color);
             background: #fbf9f5;
@@ -849,6 +944,34 @@
             from { transform: translateY(20px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
+
+        /* 空状态 */
+        .empty-tasks {
+            padding: 30px 10px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            .header-actions {
+                justify-content: space-between;
+            }
+            .stage-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .feedback-buttons {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
@@ -867,37 +990,54 @@
                 <span>🎙️</span> <span id="currentEngineText">发音源: 百度语音</span> ⚙️
             </div>
             <div class="stat-badge">
-                <span>🌟 坚持打卡:</span> <span id="streakCount">2</span> 天
+                <span>🌟 今日已练:</span> <span id="streakCount">0</span> 个
             </div>
         </div>
     </header>
 
     <!-- 顶层视图切换 -->
     <div class="tab-bar">
-        <button class="tab-btn active" onclick="switchMainTab('practice')">✍️ 今日练字工作台</button>
+        <button class="tab-btn active" onclick="switchMainTab('practice')">✍️ 练字工作台</button>
         <button class="tab-btn" onclick="switchMainTab('calendar')">📅 记忆日历看板</button>
-        <button class="tab-btn" onclick="openVoiceConfigModal()">⚙️ 发音库配置中心</button>
+        <button class="tab-btn" onclick="openVoiceConfigModal()">⚙️ 发音配置中心</button>
     </div>
 
     <!-- 主展示面板 -->
     <main>
         <!-- 视图 1：今日练字工作台 -->
         <div id="practiceView" class="content-panel active">
+
+            <!-- 今日进度概览横幅 (常驻显示，不阻挡下方工作台) -->
+            <div class="daily-overview-banner">
+                <div class="overview-title">
+                    <span style="font-size: 20px;">📋</span>
+                    <div>
+                        <h2 id="bannerDateTitle">今日学习任务</h2>
+                        <span style="font-size: 11px; color: var(--text-muted);" id="bannerSubText">先复习旧知，再学新字符，科学巩固抗遗忘</span>
+                    </div>
+                </div>
+                <div class="overview-counts">
+                    <span class="count-pill review" id="pillReviewCount">⏰ 待复习 0 个</span>
+                    <span class="count-pill new" id="pillNewCount">🌱 新学 0 个</span>
+                    <span class="count-pill done" id="pillDoneCount">✔ 已完成 0 个</span>
+                </div>
+            </div>
+
             <div class="workspace-grid">
                 
                 <!-- 左栏：任务列表与品类过滤 -->
                 <div class="task-sidebar">
                     <div class="category-filter">
-                        <button class="filter-chip active" onclick="filterCategory('ALL')">全部待练</button>
-                        <button class="filter-chip" onclick="filterCategory('NUMBER')">🔢 数字(0-9)</button>
-                        <button class="filter-chip" onclick="filterCategory('PINYIN')">🔤 拼音</button>
-                        <button class="filter-chip" onclick="filterCategory('HANZI')">🀄 汉字</button>
-                        <button class="filter-chip" onclick="filterCategory('LETTER')">🅰️ 字母</button>
+                        <button class="filter-chip active" data-category="ALL" onclick="filterCategory('ALL')">全部</button>
+                        <button class="filter-chip" data-category="NUMBER" onclick="filterCategory('NUMBER')">🔢 数字(0-9)</button>
+                        <button class="filter-chip" data-category="PINYIN" onclick="filterCategory('PINYIN')">🔤 拼音</button>
+                        <button class="filter-chip" data-category="HANZI" onclick="filterCategory('HANZI')">🀄 汉字</button>
+                        <button class="filter-chip" data-category="LETTER" onclick="filterCategory('LETTER')">🅰️ 字母</button>
                     </div>
 
                     <div class="section-header">
-                        <span>今日需练清单 (<span id="taskCount">0</span>)</span>
-                        <span style="font-size: 11px; color: var(--primary);" id="todayDateStr">2026-10-17</span>
+                        <span>待练清单 (<span id="taskCount">0</span>)</span>
+                        <span style="font-size: 11px; color: var(--primary);" id="todayDateStr"></span>
                     </div>
 
                     <div class="card-list" id="cardListContainer">
@@ -906,16 +1046,22 @@
                 </div>
 
                 <!-- 右栏：书写格、笔顺演示与打分反馈 -->
-                <div class="stage-card">
+                <div class="stage-card" id="writingStage">
                     <div class="stage-header">
                         <div class="character-title">
                             <h2 id="currentDisplayChar">2</h2>
                             <span class="pinyin-tag" id="currentDisplayPinyin">èr</span>
                             <span class="stage-pill due" id="currentStageBadge">复习阶段 1</span>
                         </div>
-                        <button class="play-voice-btn" onclick="playCurrentVoice()">
-                            <span>🔊</span> 听读音
-                        </button>
+                        <div class="stage-header-actions">
+                            <button class="play-voice-btn" onclick="playCurrentVoice()">
+                                <span>🔊</span> 听读音
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="lesson-info-bar" id="currentLessonInfo">
+                        数字 0–9 · 基础练习
                     </div>
 
                     <!-- 儿歌口诀 -->
@@ -931,18 +1077,12 @@
 
                     <!-- 书写格与演示区 -->
                     <div class="writing-canvas-container">
-                        <div class="grid-wrapper" id="gridWrapper">
-                            <!-- 根据字符类型自适应网格 -->
-                            <div id="gridBackground" class="ri-zi-ge"></div>
-
-                            <!-- 笔顺 SVG 动画图层 -->
-                            <svg class="stroke-svg" id="strokeSvg" viewBox="0 0 200 240">
-                                <!-- 动态插入 path -->
-                            </svg>
-
-                            <!-- 导引光标 -->
-                            <div class="brush-cursor" id="brushCursor"></div>
+                        <div class="grid-wrapper" id="gridWrapper" data-grid="number">
+                            <!-- 笔顺 SVG 动画与格线图层 -->
+                            <svg class="stroke-svg" id="strokeSvg" viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"></svg>
                         </div>
+
+                        <p class="demo-status" id="strokeDemoStatus">点击播放，红点光晕带你一步步运笔演示。</p>
 
                         <!-- 演示操作控制栏 -->
                         <div class="demo-controls">
@@ -960,28 +1100,31 @@
 
                     <!-- 运笔要领指引 -->
                     <div class="hints-panel">
-                        <strong>✍️ 运笔要领：</strong>
-                        <div id="hintsText" style="margin-top: 4px;">右上格起笔画大圆弧，顺时针滑落至左下角，再向右拉出平底横。</div>
+                        <div class="hints-heading">
+                            <strong>✍️ 运笔要领：</strong>
+                            <button class="action-btn" id="readHintsBtn" onclick="playHintsVoice()" style="font-size:12px; padding:4px 10px;">🔊 朗读要领</button>
+                        </div>
+                        <div id="hintsText" style="margin-top: 6px;"></div>
                     </div>
 
                     <!-- 3星闭环反馈 -->
                     <div class="feedback-section">
-                        <div class="feedback-label">孩子书写反馈评价（提交后自动按艾宾浩斯更新排期）：</div>
+                        <div class="feedback-label">孩子练完后打分（系统将自适应计算下次复习日期）：</div>
                         <div class="feedback-buttons">
-                            <button class="rating-btn hard" onclick="submitReview(1)">
+                            <button class="rating-btn hard" id="rateBtn1" onclick="submitReview(1)">
                                 <span class="stars">★☆☆</span>
-                                <span class="tag-name">需重练 (太难)</span>
-                                <span class="desc">明天重新强化</span>
+                                <span class="tag-name">还要帮忙 (太难)</span>
+                                <span class="desc">明天重新强化巩固</span>
                             </button>
-                            <button class="rating-btn good" onclick="submitReview(2)">
+                            <button class="rating-btn good" id="rateBtn2" onclick="submitReview(2)">
                                 <span class="stars">★★☆</span>
-                                <span class="tag-name">良好 (一般)</span>
-                                <span class="desc">进入下一阶段</span>
+                                <span class="tag-name">提醒一下会 (良好)</span>
+                                <span class="desc">按记忆曲线阶梯顺延</span>
                             </button>
-                            <button class="rating-btn easy" onclick="submitReview(3)">
+                            <button class="rating-btn easy" id="rateBtn3" onclick="submitReview(3)">
                                 <span class="stars">★★★</span>
-                                <span class="tag-name">熟练 (太棒了)</span>
-                                <span class="desc">字形端正加倍顺延</span>
+                                <span class="tag-name">自己会了 (熟练)</span>
+                                <span class="desc">字形端正，延长复习</span>
                             </button>
                         </div>
                     </div>
@@ -1000,7 +1143,7 @@
                     </div>
                     <div class="month-switch">
                         <button class="month-btn" onclick="changeMonth(-1)">◀ 上个月</button>
-                        <strong id="calendarMonthTitle" style="font-size: 16px;">2026年10月</strong>
+                        <strong id="calendarMonthTitle" style="font-size: 16px;"></strong>
                         <button class="month-btn" onclick="changeMonth(1)">下个月 ▶</button>
                     </div>
                 </div>
@@ -1016,7 +1159,7 @@
                 </div>
 
                 <div class="calendar-grid" id="calendarDaysGrid" style="margin-top: 8px;">
-                    <!-- 动态生成 35/42 个日期单元格 -->
+                    <!-- 动态生成日期单元格 -->
                 </div>
             </div>
         </div>
@@ -1030,8 +1173,8 @@
                 <button class="close-btn" onclick="closeVoiceConfigModal()">&times;</button>
             </div>
 
-            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
-                您可以随时切换适合幼儿跟读的发音来源，支持百度高保真语音、有道真人发音或浏览器离线发音，系统重启后配置依然保留在 H2 数据库中。
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px;">
+                支持百度高保真语音、有道真人发音或浏览器离线发音，配置持久化保存在 H2 数据库中。
             </p>
 
             <div class="form-group">
@@ -1061,7 +1204,7 @@
                 <span id="testAudioStatus" style="font-size: 12px; color: var(--accent);"></span>
             </div>
 
-            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;">
                 <button class="action-btn" onclick="closeVoiceConfigModal()">取消</button>
                 <button class="action-btn primary" onclick="saveVoiceConfig()">保存配置并生效</button>
             </div>
@@ -1071,21 +1214,39 @@
     <!-- 底部轻提示 -->
     <div class="toast" id="toastMsg">打卡成功！已更新下一次复习排期！</div>
 
-    <!-- 交互脚本 -->
+    <!-- 核心交互脚本 -->
     <script>
         // 全局状态
         let currentCategory = 'ALL';
         let allCards = [];
+        let libraryCards = [];
         let activeCard = null;
         let isSlowSpeech = true;
         let voiceConfigs = [];
         let activeVoiceConfig = null;
-        let currentYearMonth = '2026-10';
+        let isAnimating = false;
+        let animationVersion = 0;
+        let currentStrokeHints = [];
+        let currentAudio = null;
+        let speechVersion = 0;
+        let isSubmitting = false;
 
-        // 页面初始化
+        function getTodayDateStr() {
+            const d = new Date();
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${y}-${m}-${day}`;
+        }
+
+        let currentYearMonth = getTodayDateStr().slice(0, 7);
+
+        // 页面启动
         document.addEventListener('DOMContentLoaded', async () => {
+            document.getElementById('todayDateStr').innerText = getTodayDateStr();
+            document.getElementById('bannerDateTitle').innerText = `${getTodayDateStr()} 学习任务`;
             await fetchVoiceConfigs();
-            await loadTodayTasks();
+            await loadCardsData();
             renderCalendar(currentYearMonth);
         });
 
@@ -1100,41 +1261,85 @@
                 }
             } catch (err) {
                 console.warn('Backend voice config fetch failed, using fallback web_speech', err);
-                activeVoiceConfig = { providerType: 'WEB_SPEECH', providerName: '浏览器原生离线语音' };
+                activeVoiceConfig = { providerType: 'WEB_SPEECH', providerName: '系统/浏览器原生离线语音' };
                 updateVoiceBadgeUI();
             }
         }
 
         function updateVoiceBadgeUI() {
             if (activeVoiceConfig) {
-                document.getElementById('currentEngineText').innerText = '发音源: ' + activeVoiceConfig.providerName;
+                document.getElementById('currentEngineText').innerText = '发音源: ' + (activeVoiceConfig.providerName || '百度语音');
             }
         }
 
-        // 2. 加载今日任务列表
-        async function loadTodayTasks() {
+        // 2. 加载卡片数据 (今日新学 + 待复习 + 全量卡片)
+        async function loadCardsData() {
+            const today = getTodayDateStr();
             try {
-                const res = await fetch('/api/cards/today?date=2026-10-17');
-                if (res.ok) {
-                    const data = await res.json();
-                    document.getElementById('todayDateStr').innerText = data.todayDate || '2026-10-17';
-                    // 聚合新学与待复习卡片
-                    const list = [];
-                    if (data.reviewCards) list.push(...data.reviewCards);
-                    if (data.newCards) {
-                        data.newCards.forEach(c => {
-                            if (!list.some(item => item.id === c.id)) list.push(c);
-                        });
-                    }
-                    allCards = list;
-                    renderCardList();
-                    if (allCards.length > 0 && !activeCard) {
-                        selectCard(allCards[0]);
-                    }
+                // 并行获取今日待练任务与全部题库
+                const [todayRes, allRes] = await Promise.all([
+                    fetch(`/api/cards/today?date=${today}`),
+                    fetch('/api/cards')
+                ]);
+
+                let todayData = null;
+                if (todayRes.ok) {
+                    todayData = await todayRes.json();
                 }
+                if (allRes.ok) {
+                    libraryCards = await allRes.json();
+                }
+
+                // 统计数量
+                const reviewCards = (todayData && todayData.reviewCards) || [];
+                const newCards = (todayData && todayData.newCards) || [];
+                const completedToday = (todayData && todayData.completedTodayCount) || 0;
+
+                document.getElementById('pillReviewCount').innerText = `⏰ 待复习 ${reviewCards.length} 个`;
+                document.getElementById('pillNewCount').innerText = `🌱 新学 ${newCards.length} 个`;
+                document.getElementById('pillDoneCount').innerText = `✔ 已完成 ${completedToday} 个`;
+                document.getElementById('streakCount').innerText = completedToday;
+
+                // 聚合待练任务：优先待复习，再新学
+                const map = new Map();
+                reviewCards.forEach(c => map.set(c.id, c));
+                newCards.forEach(c => {
+                    if (!map.has(c.id)) map.set(c.id, c);
+                });
+
+                // 如果今天既没有待复习也没有新学（或者全部练完了），则展示题库内容供自由练习
+                if (map.size > 0) {
+                    allCards = Array.from(map.values());
+                } else if (libraryCards.length > 0) {
+                    allCards = libraryCards;
+                } else {
+                    allCards = [];
+                }
+
+                renderCardList();
+
+                // 默认选中第一张或保持当前选中
+                const filtered = getFilteredCards();
+                if (filtered.length > 0) {
+                    if (!activeCard || !filtered.some(c => c.id === activeCard.id)) {
+                        selectCard(filtered[0]);
+                    } else {
+                        const fresh = filtered.find(c => c.id === activeCard.id);
+                        selectCard(fresh);
+                    }
+                } else {
+                    clearSelection();
+                }
+
             } catch (err) {
-                console.error('Failed to load today tasks', err);
+                console.error('Failed to load card data', err);
+                showToast('加载练习数据异常，请检查服务连接');
             }
+        }
+
+        function getFilteredCards() {
+            if (currentCategory === 'ALL') return allCards;
+            return allCards.filter(c => c.category === currentCategory);
         }
 
         // 3. 渲染左侧卡片列表
@@ -1142,12 +1347,13 @@
             const container = document.getElementById('cardListContainer');
             container.innerHTML = '';
 
-            const filtered = allCards.filter(c => {
-                if (currentCategory === 'ALL') return true;
-                return c.category === currentCategory;
-            });
-
+            const filtered = getFilteredCards();
             document.getElementById('taskCount').innerText = filtered.length;
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="empty-tasks">当前分类下没有字符。<br>可切换上方其它分类继续练习。</div>';
+                return;
+            }
 
             filtered.forEach(c => {
                 const item = document.createElement('div');
@@ -1158,15 +1364,15 @@
                 if (c.category === 'NUMBER') avatarClass += ' number-avatar';
                 if (c.category === 'PINYIN') avatarClass += ' pinyin-avatar';
 
-                const stageText = c.stage === 0 ? '新学' : ('复习 ' + c.stage);
-                const isDue = c.stage > 0;
+                const stageText = (c.stage === 0) ? '新学' : ('复习 ' + c.stage);
+                const isDue = (c.stage > 0);
 
                 item.innerHTML = `
                     <div class="card-left">
                         <div class="${avatarClass}">${c.characterVal}</div>
                         <div class="char-meta">
                             <h3>${c.characterVal} <small style="font-size:12px; font-weight:normal; color:#888;">${c.pinyin || ''}</small></h3>
-                            <span>${c.chant ? c.chant.slice(0, 10) + '...' : '经典练字'}</span>
+                            <span>${c.chant ? c.chant.slice(0, 12) + '...' : '标准笔顺规范'}</span>
                         </div>
                     </div>
                     <span class="stage-pill ${isDue ? 'due' : ''}">${stageText}</span>
@@ -1177,162 +1383,315 @@
 
         // 4. 选中卡片并渲染工作台
         function selectCard(card) {
+            stopSpeech();
             activeCard = card;
+            animationVersion++;
+            isAnimating = false;
+
             renderCardList();
 
+            // 大标题和注音
             document.getElementById('currentDisplayChar').innerText = card.characterVal;
             document.getElementById('currentDisplayPinyin').innerText = card.pinyin || '';
-            document.getElementById('currentStageBadge').innerText = card.stage === 0 ? '初学打卡' : ('复习阶段 ' + card.stage);
-            document.getElementById('currentChantText').innerText = card.chant || '标准笔画练习';
+            document.getElementById('currentStageBadge').innerText = (card.stage === 0) ? '🌱 新学' : (`⏰ 复习 ${card.stage}`);
+            document.getElementById('currentStageBadge').className = 'stage-pill' + (card.stage > 0 ? ' due' : '');
 
-            // 自适应网格
-            const gridBg = document.getElementById('gridBackground');
-            gridBg.className = '';
-            if (card.gridType === 'RI_ZI_GE') {
-                gridBg.className = 'ri-zi-ge';
-            } else if (card.gridType === 'FOUR_LINE') {
-                gridBg.className = 'four-line-grid';
-                gridBg.innerHTML = `
-                    <div class="line-slot">上格</div>
-                    <div class="line-slot slot-middle">中格 (主要身体)</div>
-                    <div class="line-slot">下格</div>
-                `;
-            } else {
-                gridBg.className = 'mi-zi-ge';
-                gridBg.innerHTML = '';
-            }
+            // 单元与笔画信息
+            const catNames = { NUMBER: '数字 0–9', PINYIN: '汉语拼音', HANZI: '基础汉字', LETTER: '英文字母' };
+            document.getElementById('currentLessonInfo').innerText = `${catNames[card.category] || '基础练习'} · 共 ${card.strokeCount || 1} 笔 · ${card.lessonTitle || '规范书写'}`;
 
-            // 笔画要领
-            let hints = [];
-            try {
-                hints = typeof card.strokeHints === 'string' ? JSON.parse(card.strokeHints) : (card.strokeHints || []);
-            } catch (e) {
-                hints = [card.strokeHints || '仔细观察起笔与收笔位置'];
-            }
-            document.getElementById('hintsText').innerHTML = hints.map((h, i) => `<div>第${i+1}笔：${h}</div>`).join('');
+            // 口诀
+            document.getElementById('currentChantText').innerText = card.chant || '规范笔顺练习';
 
-            // 重置 SVG
+            // 运笔要领
+            currentStrokeHints = parseCardArray(card.strokeHints);
+            renderStrokeHints();
+
+            // 绘制书写格与笔画 SVG
             setupStrokesSvg(card);
+
+            // 确保按钮可用
+            updatePracticeButtons();
         }
 
-        // 5. 初始化 SVG 笔画
+        function clearSelection() {
+            activeCard = null;
+            document.getElementById('currentDisplayChar').innerText = '🌱';
+            document.getElementById('currentDisplayPinyin').innerText = '';
+            document.getElementById('currentStageBadge').innerText = '已练完';
+            document.getElementById('currentChantText').innerText = '今日清单已全部练完，切换其它分类继续练习吧！';
+            document.getElementById('hintsText').innerText = '可以在左侧挑选字符继续练习。';
+            document.getElementById('strokeSvg').innerHTML = '';
+            updatePracticeButtons();
+        }
+
+        function updatePracticeButtons() {
+            const hasCard = !!activeCard;
+            document.querySelectorAll('.rating-btn').forEach(btn => {
+                btn.disabled = !hasCard || isSubmitting;
+            });
+            document.getElementById('playDemoBtn').disabled = !hasCard || isAnimating;
+        }
+
+        function parseCardArray(val) {
+            if (Array.isArray(val)) return val;
+            try {
+                const parsed = JSON.parse(val || '[]');
+                return Array.isArray(parsed) ? parsed : [];
+            } catch (e) {
+                return val ? [String(val)] : [];
+            }
+        }
+
+        function renderStrokeHints() {
+            const container = document.getElementById('hintsText');
+            container.innerHTML = '';
+            if (currentStrokeHints.length === 0) {
+                container.innerHTML = '<div>观察字符起笔与收笔位置，按笔顺规范临摹。</div>';
+                return;
+            }
+            currentStrokeHints.forEach((hint, index) => {
+                const row = document.createElement('div');
+                row.className = 'hint-step';
+                row.id = `hint-step-${index}`;
+                row.innerHTML = `
+                    <div style="flex:1;"><strong>第 ${index + 1} 笔：</strong>${hint}</div>
+                    <button class="hint-read-btn" onclick="playSingleHintVoice(${index})" title="朗读此笔要领">🔊</button>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        // 5. 初始化 SVG 笔画与网格
+        function svgNode(name, attributes = {}) {
+            const node = document.createElementNS('http://www.w3.org/2000/svg', name);
+            Object.entries(attributes).forEach(([k, v]) => node.setAttribute(k, v));
+            return node;
+        }
+
         function setupStrokesSvg(card) {
             const svg = document.getElementById('strokeSvg');
             svg.innerHTML = '';
-            let paths = [];
-            try {
-                paths = typeof card.strokePaths === 'string' ? JSON.parse(card.strokePaths) : (card.strokePaths || []);
-            } catch (e) {
-                paths = [];
+
+            const gridType = card.gridType;
+            let grid = 'hanzi';
+            let width = 240, height = 240;
+
+            if (gridType === 'FOUR_LINE') {
+                grid = 'fourline';
+                width = 320;
+                height = 240;
+            } else if (gridType === 'RI_ZI_GE') {
+                grid = 'number';
+                width = 200;
+                height = 300;
             }
 
-            paths.forEach((d, idx) => {
-                const pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                pathEl.setAttribute('d', d);
-                pathEl.setAttribute('class', 'stroke-path');
-                pathEl.setAttribute('id', `stroke-${idx}`);
-                svg.appendChild(pathEl);
+            document.getElementById('gridWrapper').dataset.grid = grid;
+            svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+
+            const gridColor = (grid === 'fourline') ? '#2e7d32' : (grid === 'number') ? '#0077cc' : '#d9534f';
+
+            // 底层网格导引线
+            const guides = svgNode('g', { id: 'gridGuides' });
+            guides.appendChild(svgNode('rect', { x: 1, y: 1, width: width - 2, height: height - 2, fill: '#fffefb' }));
+
+            function line(x1, y1, x2, y2, dash = '5 5') {
+                guides.appendChild(svgNode('line', {
+                    x1, y1, x2, y2, stroke: gridColor, 'stroke-opacity': 0.3, 'stroke-width': 1, 'stroke-dasharray': dash
+                }));
+            }
+
+            if (grid === 'fourline') {
+                // 中格浅黄高亮
+                guides.appendChild(svgNode('rect', { x: 1, y: 80, width: width - 2, height: 80, fill: '#fff5cf' }));
+                line(1, 80, width - 1, 80);
+                line(1, 160, width - 1, 160);
+                ['上格', '中格', '下格'].forEach((label, idx) => {
+                    const text = svgNode('text', {
+                        x: width - 8, y: idx * 80 + 44, 'text-anchor': 'end', fill: gridColor, 'fill-opacity': 0.45, 'font-size': 11
+                    });
+                    text.textContent = label;
+                    guides.appendChild(text);
+                });
+            } else if (grid === 'number') {
+                // 日字格：横腰线与倾斜线
+                line(1, 150, width - 1, 150);
+                line(118, 1, 82, height - 1);
+            } else {
+                // 米字格：十字虚线与对角虚线
+                line(120, 1, 120, 239);
+                line(1, 120, 239, 120);
+                line(1, 1, 239, 239);
+                line(239, 1, 1, 239);
+            }
+
+            // 外边框
+            guides.appendChild(svgNode('rect', {
+                x: 1, y: 1, width: width - 2, height: height - 2, rx: 4, fill: 'none', stroke: gridColor, 'stroke-width': 2
+            }));
+            svg.appendChild(guides);
+
+            // 笔画图层
+            const strokeLayer = svgNode('g', { id: 'strokeLayer' });
+            if (grid === 'fourline') strokeLayer.setAttribute('transform', 'translate(60 0)');
+            if (grid === 'number') strokeLayer.setAttribute('transform', 'matrix(1.35 0 0 1.35 -35 -25.5)');
+
+            const paths = parseCardArray(card.strokePaths);
+            const strokeWidth = (grid === 'hanzi') ? 11 : (grid === 'number') ? 10 : (card.characterVal.length > 2 ? 6 : 8);
+
+            // 底层静态浅色轮廓
+            paths.forEach(d => {
+                strokeLayer.appendChild(svgNode('path', { d, class: 'stroke-guide', 'stroke-width': strokeWidth }));
             });
+
+            // 动态主笔画
+            paths.forEach((d, idx) => {
+                const path = svgNode('path', { d, class: 'stroke-path', id: `stroke-${idx}`, 'stroke-width': strokeWidth });
+                path.style.strokeWidth = strokeWidth;
+                strokeLayer.appendChild(path);
+            });
+
+            // 运笔发光光标
+            strokeLayer.appendChild(svgNode('circle', { id: 'brushCursor', class: 'brush-cursor', r: 6 }));
+            svg.appendChild(strokeLayer);
+
+            document.getElementById('strokeDemoStatus').innerText = '点击播放书写演示，跟着红点光晕观察笔顺。';
         }
 
         // 6. 播放书写演示动画
-        let isAnimating = false;
         async function playStrokeDemo() {
             if (isAnimating || !activeCard) return;
+            const currentVer = ++animationVersion;
             isAnimating = true;
-            document.getElementById('playDemoBtn').disabled = true;
+            updatePracticeButtons();
 
             const cursor = document.getElementById('brushCursor');
-            cursor.style.display = 'block';
+            const paths = [...document.querySelectorAll('#strokeLayer .stroke-path')];
+            const status = document.getElementById('strokeDemoStatus');
 
-            let paths = [];
-            try {
-                paths = typeof activeCard.strokePaths === 'string' ? JSON.parse(activeCard.strokePaths) : [];
-            } catch (e) { paths = []; }
-
-            // 恢复所有笔画为隐藏状态准备顺次播放
-            paths.forEach((_, idx) => {
-                const p = document.getElementById(`stroke-${idx}`);
-                if (p) {
-                    const len = p.getTotalLength();
-                    p.style.strokeDasharray = len;
-                    p.style.strokeDashoffset = len;
-                }
+            // 初始全部隐藏准备依次顺畅划出
+            paths.forEach(p => {
+                const len = p.getTotalLength();
+                p.style.strokeDasharray = `${len} ${len}`;
+                p.style.strokeDashoffset = len;
             });
+            cursor.style.display = 'none';
 
             for (let i = 0; i < paths.length; i++) {
-                const p = document.getElementById(`stroke-${i}`);
-                if (!p) continue;
+                if (currentVer !== animationVersion) return;
+                const path = paths[i];
+                const len = path.getTotalLength();
+                const duration = Math.max(600, Math.min(1300, len * 6));
 
-                const totalLength = p.getTotalLength();
-                const duration = 900; // 毫秒
-                const start = performance.now();
+                status.innerText = `正在演示：第 ${i + 1} 笔 / 共 ${paths.length} 笔`;
+                document.querySelectorAll('.hint-step').forEach((row, idx) => row.classList.toggle('current', idx === i));
 
+                let startTime;
                 await new Promise(resolve => {
-                    function step(now) {
-                        const elapsed = now - start;
+                    function step(timestamp) {
+                        if (currentVer !== animationVersion) { resolve(); return; }
+                        if (!startTime) startTime = timestamp;
+                        const elapsed = timestamp - startTime;
                         const progress = Math.min(elapsed / duration, 1);
-                        p.style.strokeDashoffset = totalLength * (1 - progress);
 
-                        // 光标循迹
-                        const pt = p.getPointAtLength(totalLength * progress);
-                        cursor.style.left = pt.x + 'px';
-                        cursor.style.top = pt.y + 'px';
+                        path.style.strokeDashoffset = len * (1 - progress);
+
+                        // 红点光标循迹
+                        const pt = path.getPointAtLength(len * progress);
+                        cursor.setAttribute('cx', pt.x);
+                        cursor.setAttribute('cy', pt.y);
+                        cursor.style.display = 'block';
 
                         if (progress < 1) {
                             requestAnimationFrame(step);
                         } else {
-                            setTimeout(resolve, 150);
+                            setTimeout(resolve, 140);
                         }
                     }
                     requestAnimationFrame(step);
                 });
             }
 
+            if (currentVer !== animationVersion) return;
             cursor.style.display = 'none';
+            document.querySelectorAll('.hint-step').forEach(row => row.classList.remove('current'));
             isAnimating = false;
-            document.getElementById('playDemoBtn').disabled = false;
+            status.innerText = '演示完成！可以在纸上临摹，或者再播放一次。';
+            updatePracticeButtons();
         }
 
         function resetCanvas() {
             if (activeCard) selectCard(activeCard);
         }
 
-        // 7. 发音逻辑 (多源驱动 + 离线降级)
-        async function playCurrentVoice() {
-            if (!activeCard) return;
-            speakText(activeCard.characterVal, activeCard.category);
+        // 7. 发音逻辑 (支持百度TTS、有道、离线WebSpeech自动降级)
+        function stopSpeech() {
+            speechVersion++;
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio = null;
+            }
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
         }
 
-        async function playChantVoice() {
-            if (!activeCard || !activeCard.chant) return;
-            speakText(activeCard.chant, activeCard.category);
+        function playCurrentVoice() {
+            if (activeCard) {
+                speakText(activeCard.readingText || activeCard.characterVal, activeCard.category);
+            }
+        }
+
+        function playChantVoice() {
+            if (activeCard && activeCard.chant) {
+                speakText(activeCard.chant, 'HANZI');
+            }
+        }
+
+        function playHintsVoice() {
+            if (!activeCard || !currentStrokeHints.length) return;
+            const fullText = '运笔要领。' + currentStrokeHints.map((h, i) => `第${i+1}笔，${h}`).join('。');
+            speakText(fullText, 'HANZI');
+        }
+
+        function playSingleHintVoice(index) {
+            if (currentStrokeHints[index]) {
+                speakText(`第${index+1}笔，${currentStrokeHints[index]}`, 'HANZI');
+            }
         }
 
         async function speakText(text, category) {
+            if (!text) return;
+            stopSpeech();
+            const curVer = speechVersion;
             const provider = activeVoiceConfig ? activeVoiceConfig.providerType : 'WEB_SPEECH';
 
+            function fallbackLocalSpeech() {
+                if (curVer !== speechVersion) return;
+                if (!('speechSynthesis' in window)) return;
+                const utter = new SpeechSynthesisUtterance(text);
+                utter.lang = (category === 'LETTER') ? 'en-US' : 'zh-CN';
+                utter.rate = isSlowSpeech ? 0.75 : 1.0;
+                utter.pitch = 1.05;
+                window.speechSynthesis.speak(utter);
+            }
+
             if (provider === 'WEB_SPEECH') {
-                // 浏览器原生 Web Speech API 慢速发音
-                if ('speechSynthesis' in window) {
-                    window.speechSynthesis.cancel();
-                    const utter = new SpeechSynthesisUtterance(text);
-                    utter.lang = category === 'LETTER' ? 'en-US' : 'zh-CN';
-                    utter.rate = isSlowSpeech ? 0.75 : 1.0;
-                    utter.pitch = 1.15;
-                    window.speechSynthesis.speak(utter);
-                }
-            } else {
-                // 服务端百度/有道/自定义音频流
-                try {
-                    const audio = new Audio(`/api/voice/synthesize?text=${encodeURIComponent(text)}&category=${category || 'HANZI'}`);
-                    await audio.play();
-                } catch (err) {
-                    console.warn('Network audio failed, falling back to local SpeechSynthesis', err);
-                    const utter = new SpeechSynthesisUtterance(text);
-                    utter.rate = 0.75;
-                    window.speechSynthesis.speak(utter);
-                }
+                fallbackLocalSpeech();
+                return;
+            }
+
+            try {
+                const audio = new Audio(`/api/voice/synthesize?text=${encodeURIComponent(text)}&category=${category || 'HANZI'}`);
+                currentAudio = audio;
+                audio.onerror = () => {
+                    console.warn('Network audio failed, falling back to local SpeechSynthesis');
+                    fallbackLocalSpeech();
+                };
+                await audio.play();
+            } catch (err) {
+                fallbackLocalSpeech();
             }
         }
 
@@ -1345,24 +1704,47 @@
 
         // 8. 提交打卡与 SM-2 阶段自适应
         async function submitReview(rating) {
-            if (!activeCard) return;
+            if (!activeCard || isSubmitting) return;
+            isSubmitting = true;
+            updatePracticeButtons();
+
+            const curId = activeCard.id;
+            const curChar = activeCard.characterVal;
+            const today = getTodayDateStr();
+
             try {
-                const res = await fetch('/api/cards/review?date=2026-10-17', {
+                const res = await fetch(`/api/cards/review?date=${today}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ cardId: activeCard.id, rating: rating })
+                    body: JSON.stringify({ cardId: curId, rating: rating })
                 });
 
-                if (res.ok) {
-                    const updated = await res.json();
-                    showToast(`【${updated.characterVal}】打卡成功！下次复习: ${updated.nextReviewDate}`);
-                    // 重新刷新列表和日历
-                    await loadTodayTasks();
-                    renderCalendar(currentYearMonth);
+                if (!res.ok) throw new Error('打卡请求异常');
+
+                const updated = await res.json();
+                showToast(`【${curChar}】打卡完成！下次复习: ${updated.nextReviewDate}`);
+
+                // 找到下一个字
+                const filtered = getFilteredCards();
+                const curIdx = filtered.findIndex(c => c.id === curId);
+                const nextCard = (curIdx >= 0 && curIdx < filtered.length - 1) ? filtered[curIdx + 1] : null;
+
+                // 重新刷新数据与日历
+                await loadCardsData();
+
+                if (nextCard) {
+                    const fresh = getFilteredCards().find(c => c.id === nextCard.id);
+                    if (fresh) selectCard(fresh);
                 }
+
+                renderCalendar(currentYearMonth);
+
             } catch (err) {
                 console.error('Submit review error', err);
                 showToast('打卡提交失败，请检查服务连接');
+            } finally {
+                isSubmitting = false;
+                updatePracticeButtons();
             }
         }
 
@@ -1383,25 +1765,25 @@
                 console.warn('Calendar summary fetch error', e);
             }
 
-            // 计算该月第一天星期几和总天数
             const [y, m] = yearMonth.split('-').map(Number);
             const firstDay = new Date(y, m - 1, 1).getDay();
             const daysInMonth = new Date(y, m, 0).getDate();
+            const today = getTodayDateStr();
 
-            // 填充空白前置格子
+            // 填充前置空白
             for (let i = 0; i < firstDay; i++) {
-                const emptyCell = document.createElement('div');
-                emptyCell.className = 'cal-cell';
-                emptyCell.style.opacity = '0.3';
-                emptyCell.style.background = '#fcfbfa';
-                grid.appendChild(emptyCell);
+                const empty = document.createElement('div');
+                empty.className = 'cal-cell';
+                empty.style.opacity = '0.3';
+                empty.style.background = '#fcfbfa';
+                grid.appendChild(empty);
             }
 
-            // 填充日期格子
+            // 填充每日格子
             for (let d = 1; d <= daysInMonth; d++) {
                 const dateStr = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
                 const cell = document.createElement('div');
-                cell.className = 'cal-cell' + (dateStr === '2026-10-17' ? ' today' : '');
+                cell.className = 'cal-cell' + (dateStr === today ? ' today' : '');
 
                 const dayData = summaryMap[dateStr] || { practicedCount: 0, scheduledReviewCount: 0, characters: [] };
 
@@ -1438,16 +1820,24 @@
             renderCalendar(currentYearMonth);
         }
 
-        // 10. 品类切换
+        // 10. 分类过滤
         function filterCategory(cat) {
             currentCategory = cat;
-            document.querySelectorAll('.filter-chip').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            document.querySelectorAll('.filter-chip').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.category === cat);
+            });
             renderCardList();
+            const filtered = getFilteredCards();
+            if (filtered.length > 0) {
+                selectCard(filtered[0]);
+            } else {
+                clearSelection();
+            }
         }
 
         // 11. 顶部 Tab 切换
         function switchMainTab(tab) {
+            stopSpeech();
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
 
@@ -1515,9 +1905,7 @@
             const speed = parseFloat(document.getElementById('speedSlider').value);
 
             try {
-                // 切换激活状态
                 await fetch(`/api/voice/active/${providerType}`, { method: 'PUT' });
-                // 更新配置详情
                 await fetch('/api/voice/configs', {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
@@ -1567,7 +1955,7 @@
             const toast = document.getElementById('toastMsg');
             toast.innerText = msg;
             toast.style.display = 'block';
-            setTimeout(() => { toast.style.display = 'none'; }, 2800);
+            setTimeout(() => { toast.style.display = 'none'; }, 2600);
         }
     </script>
 </body>
