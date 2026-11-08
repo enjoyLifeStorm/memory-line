@@ -3,6 +3,7 @@ package com.memoryline.service;
 import java.util.List;
 
 import com.memoryline.constant.CardCategory;
+import com.memoryline.dto.DataBackupDTO;
 import com.memoryline.dto.TodayTaskResponseDTO;
 import com.memoryline.entity.PracticeCardEntity;
 
@@ -17,9 +18,24 @@ public interface CardService {
      * 获取指定日期的今日练字任务（新学卡片 + 待复习卡片）
      *
      * @param dateStr 目标公历日期 (YYYY-MM-DD)，若为空则取系统当前日期
+     * @param newLimit 新学卡片上限
+     * @param category 品类
      * @return 今日任务响应对象
      */
-    TodayTaskResponseDTO getTodayTasks(String dateStr);
+    default TodayTaskResponseDTO getTodayTasks(String dateStr, int newLimit, CardCategory category) {
+        return getTodayTasks(dateStr, newLimit, category, null);
+    }
+
+    /**
+     * 获取指定日期的今日练字任务（新学卡片 + 待复习卡片）
+     *
+     * @param dateStr 目标公历日期 (YYYY-MM-DD)，若为空则取系统当前日期
+     * @param newLimit 新学卡片上限
+     * @param category 品类
+     * @param lesson 课本单元筛选
+     * @return 今日任务响应对象
+     */
+    TodayTaskResponseDTO getTodayTasks(String dateStr, int newLimit, CardCategory category, String lesson);
 
     /**
      * 提交单张卡片的书写反馈评分，并自适应调整下一次复习公历日期
@@ -54,4 +70,19 @@ public interface CardService {
      * @return 卡片实体
      */
     PracticeCardEntity getCardById(Long id);
+
+    /**
+     * 全量导出卡片、配置及打卡数据
+     *
+     * @return 备份数据传输对象
+     */
+    DataBackupDTO exportData();
+
+    /**
+     * 导入恢复卡片与配置数据
+     *
+     * @param backupDTO 备份数据传输对象
+     * @return 导入/更新的卡片记录总数
+     */
+    int importData(DataBackupDTO backupDTO);
 }

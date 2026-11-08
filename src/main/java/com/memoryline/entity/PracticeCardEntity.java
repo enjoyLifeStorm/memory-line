@@ -43,6 +43,19 @@ public class PracticeCardEntity {
     @Column(name = "character_val", nullable = false, length = 64)
     private String characterVal;
 
+    /** Curriculum metadata is independent from the spaced-repetition stage. */
+    @Column(name = "learning_level")
+    private Integer learningLevel;
+
+    @Column(name = "learning_order")
+    private Integer learningOrder;
+
+    @Column(name = "lesson_title", length = 96)
+    private String lessonTitle;
+
+    @Column(name = "reading_text", length = 64)
+    private String readingText;
+
     /**
      * 拼音注音
      */

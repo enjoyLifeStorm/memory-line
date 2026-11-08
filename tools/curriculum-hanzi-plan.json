@@ -1,0 +1,602 @@
+[
+  {
+    "characterVal": "一",
+    "pinyin": "yī",
+    "unit": 1,
+    "lessonTitle": "基础笔画·独体字"
+  },
+  {
+    "characterVal": "二",
+    "pinyin": "èr",
+    "unit": 1,
+    "lessonTitle": "基础笔画·独体字"
+  },
+  {
+    "characterVal": "三",
+    "pinyin": "sān",
+    "unit": 1,
+    "lessonTitle": "基础笔画·独体字"
+  },
+  {
+    "characterVal": "十",
+    "pinyin": "shí",
+    "unit": 1,
+    "lessonTitle": "基础笔画·独体字"
+  },
+  {
+    "characterVal": "人",
+    "pinyin": "rén",
+    "unit": 1,
+    "lessonTitle": "基础笔画·独体字"
+  },
+  {
+    "characterVal": "八",
+    "pinyin": "bā",
+    "unit": 1,
+    "lessonTitle": "基础笔画·独体字"
+  },
+  {
+    "characterVal": "大",
+    "pinyin": "dà",
+    "unit": 1,
+    "lessonTitle": "基础笔画·独体字"
+  },
+  {
+    "characterVal": "个",
+    "pinyin": "gè",
+    "unit": 1,
+    "lessonTitle": "基础笔画·独体字"
+  },
+  {
+    "characterVal": "上",
+    "pinyin": "shàng",
+    "unit": 1,
+    "lessonTitle": "基础笔画·独体字"
+  },
+  {
+    "characterVal": "下",
+    "pinyin": "xià",
+    "unit": 1,
+    "lessonTitle": "基础笔画·独体字"
+  },
+  {
+    "characterVal": "口",
+    "pinyin": "kǒu",
+    "unit": 1,
+    "lessonTitle": "基础笔画·独体字"
+  },
+  {
+    "characterVal": "日",
+    "pinyin": "rì",
+    "unit": 1,
+    "lessonTitle": "基础笔画·独体字"
+  },
+  {
+    "characterVal": "月",
+    "pinyin": "yuè",
+    "unit": 1,
+    "lessonTitle": "基础笔画·独体字"
+  },
+  {
+    "characterVal": "山",
+    "pinyin": "shān",
+    "unit": 1,
+    "lessonTitle": "基础笔画·独体字"
+  },
+  {
+    "characterVal": "水",
+    "pinyin": "shuǐ",
+    "unit": 1,
+    "lessonTitle": "基础笔画·独体字"
+  },
+  {
+    "characterVal": "火",
+    "pinyin": "huǒ",
+    "unit": 1,
+    "lessonTitle": "基础笔画·独体字"
+  },
+  {
+    "characterVal": "土",
+    "pinyin": "tǔ",
+    "unit": 1,
+    "lessonTitle": "基础笔画·独体字"
+  },
+  {
+    "characterVal": "木",
+    "pinyin": "mù",
+    "unit": 1,
+    "lessonTitle": "基础笔画·独体字"
+  },
+  {
+    "characterVal": "禾",
+    "pinyin": "hé",
+    "unit": 1,
+    "lessonTitle": "基础笔画·独体字"
+  },
+  {
+    "characterVal": "中",
+    "pinyin": "zhōng",
+    "unit": 1,
+    "lessonTitle": "基础笔画·独体字"
+  },
+  {
+    "characterVal": "小",
+    "pinyin": "xiǎo",
+    "unit": 2,
+    "lessonTitle": "常见独体·身体自然"
+  },
+  {
+    "characterVal": "了",
+    "pinyin": "le",
+    "unit": 2,
+    "lessonTitle": "常见独体·身体自然"
+  },
+  {
+    "characterVal": "子",
+    "pinyin": "zǐ",
+    "unit": 2,
+    "lessonTitle": "常见独体·身体自然"
+  },
+  {
+    "characterVal": "女",
+    "pinyin": "nǚ",
+    "unit": 2,
+    "lessonTitle": "常见独体·身体自然"
+  },
+  {
+    "characterVal": "门",
+    "pinyin": "mén",
+    "unit": 2,
+    "lessonTitle": "常见独体·身体自然"
+  },
+  {
+    "characterVal": "目",
+    "pinyin": "mù",
+    "unit": 2,
+    "lessonTitle": "常见独体·身体自然"
+  },
+  {
+    "characterVal": "耳",
+    "pinyin": "ěr",
+    "unit": 2,
+    "lessonTitle": "常见独体·身体自然"
+  },
+  {
+    "characterVal": "手",
+    "pinyin": "shǒu",
+    "unit": 2,
+    "lessonTitle": "常见独体·身体自然"
+  },
+  {
+    "characterVal": "足",
+    "pinyin": "zú",
+    "unit": 2,
+    "lessonTitle": "常见独体·身体自然"
+  },
+  {
+    "characterVal": "云",
+    "pinyin": "yún",
+    "unit": 2,
+    "lessonTitle": "常见独体·身体自然"
+  },
+  {
+    "characterVal": "雨",
+    "pinyin": "yǔ",
+    "unit": 2,
+    "lessonTitle": "常见独体·身体自然"
+  },
+  {
+    "characterVal": "风",
+    "pinyin": "fēng",
+    "unit": 2,
+    "lessonTitle": "常见独体·身体自然"
+  },
+  {
+    "characterVal": "飞",
+    "pinyin": "fēi",
+    "unit": 2,
+    "lessonTitle": "常见独体·身体自然"
+  },
+  {
+    "characterVal": "马",
+    "pinyin": "mǎ",
+    "unit": 2,
+    "lessonTitle": "常见独体·身体自然"
+  },
+  {
+    "characterVal": "鸟",
+    "pinyin": "niǎo",
+    "unit": 2,
+    "lessonTitle": "常见独体·身体自然"
+  },
+  {
+    "characterVal": "鱼",
+    "pinyin": "yú",
+    "unit": 2,
+    "lessonTitle": "常见独体·身体自然"
+  },
+  {
+    "characterVal": "虫",
+    "pinyin": "chóng",
+    "unit": 2,
+    "lessonTitle": "常见独体·身体自然"
+  },
+  {
+    "characterVal": "米",
+    "pinyin": "mǐ",
+    "unit": 2,
+    "lessonTitle": "常见独体·身体自然"
+  },
+  {
+    "characterVal": "田",
+    "pinyin": "tián",
+    "unit": 2,
+    "lessonTitle": "常见独体·身体自然"
+  },
+  {
+    "characterVal": "石",
+    "pinyin": "shí",
+    "unit": 2,
+    "lessonTitle": "常见独体·身体自然"
+  },
+  {
+    "characterVal": "牛",
+    "pinyin": "niú",
+    "unit": 3,
+    "lessonTitle": "生活观察·颜色数量"
+  },
+  {
+    "characterVal": "羊",
+    "pinyin": "yáng",
+    "unit": 3,
+    "lessonTitle": "生活观察·颜色数量"
+  },
+  {
+    "characterVal": "犬",
+    "pinyin": "quǎn",
+    "unit": 3,
+    "lessonTitle": "生活观察·颜色数量"
+  },
+  {
+    "characterVal": "竹",
+    "pinyin": "zhú",
+    "unit": 3,
+    "lessonTitle": "生活观察·颜色数量"
+  },
+  {
+    "characterVal": "花",
+    "pinyin": "huā",
+    "unit": 3,
+    "lessonTitle": "生活观察·颜色数量"
+  },
+  {
+    "characterVal": "草",
+    "pinyin": "cǎo",
+    "unit": 3,
+    "lessonTitle": "生活观察·颜色数量"
+  },
+  {
+    "characterVal": "果",
+    "pinyin": "guǒ",
+    "unit": 3,
+    "lessonTitle": "生活观察·颜色数量"
+  },
+  {
+    "characterVal": "叶",
+    "pinyin": "yè",
+    "unit": 3,
+    "lessonTitle": "生活观察·颜色数量"
+  },
+  {
+    "characterVal": "树",
+    "pinyin": "shù",
+    "unit": 3,
+    "lessonTitle": "生活观察·颜色数量"
+  },
+  {
+    "characterVal": "白",
+    "pinyin": "bái",
+    "unit": 3,
+    "lessonTitle": "生活观察·颜色数量"
+  },
+  {
+    "characterVal": "红",
+    "pinyin": "hóng",
+    "unit": 3,
+    "lessonTitle": "生活观察·颜色数量"
+  },
+  {
+    "characterVal": "黄",
+    "pinyin": "huáng",
+    "unit": 3,
+    "lessonTitle": "生活观察·颜色数量"
+  },
+  {
+    "characterVal": "黑",
+    "pinyin": "hēi",
+    "unit": 3,
+    "lessonTitle": "生活观察·颜色数量"
+  },
+  {
+    "characterVal": "天",
+    "pinyin": "tiān",
+    "unit": 3,
+    "lessonTitle": "生活观察·颜色数量"
+  },
+  {
+    "characterVal": "多",
+    "pinyin": "duō",
+    "unit": 3,
+    "lessonTitle": "生活观察·颜色数量"
+  },
+  {
+    "characterVal": "少",
+    "pinyin": "shǎo",
+    "unit": 3,
+    "lessonTitle": "生活观察·颜色数量"
+  },
+  {
+    "characterVal": "开",
+    "pinyin": "kāi",
+    "unit": 3,
+    "lessonTitle": "生活观察·颜色数量"
+  },
+  {
+    "characterVal": "关",
+    "pinyin": "guān",
+    "unit": 3,
+    "lessonTitle": "生活观察·颜色数量"
+  },
+  {
+    "characterVal": "见",
+    "pinyin": "jiàn",
+    "unit": 3,
+    "lessonTitle": "生活观察·颜色数量"
+  },
+  {
+    "characterVal": "来",
+    "pinyin": "lái",
+    "unit": 3,
+    "lessonTitle": "生活观察·颜色数量"
+  },
+  {
+    "characterVal": "我",
+    "pinyin": "wǒ",
+    "unit": 4,
+    "lessonTitle": "家庭校园·常用词字"
+  },
+  {
+    "characterVal": "你",
+    "pinyin": "nǐ",
+    "unit": 4,
+    "lessonTitle": "家庭校园·常用词字"
+  },
+  {
+    "characterVal": "他",
+    "pinyin": "tā",
+    "unit": 4,
+    "lessonTitle": "家庭校园·常用词字"
+  },
+  {
+    "characterVal": "爸",
+    "pinyin": "bà",
+    "unit": 4,
+    "lessonTitle": "家庭校园·常用词字"
+  },
+  {
+    "characterVal": "妈",
+    "pinyin": "mā",
+    "unit": 4,
+    "lessonTitle": "家庭校园·常用词字"
+  },
+  {
+    "characterVal": "爷",
+    "pinyin": "yé",
+    "unit": 4,
+    "lessonTitle": "家庭校园·常用词字"
+  },
+  {
+    "characterVal": "奶",
+    "pinyin": "nǎi",
+    "unit": 4,
+    "lessonTitle": "家庭校园·常用词字"
+  },
+  {
+    "characterVal": "哥",
+    "pinyin": "gē",
+    "unit": 4,
+    "lessonTitle": "家庭校园·常用词字"
+  },
+  {
+    "characterVal": "姐",
+    "pinyin": "jiě",
+    "unit": 4,
+    "lessonTitle": "家庭校园·常用词字"
+  },
+  {
+    "characterVal": "弟",
+    "pinyin": "dì",
+    "unit": 4,
+    "lessonTitle": "家庭校园·常用词字"
+  },
+  {
+    "characterVal": "妹",
+    "pinyin": "mèi",
+    "unit": 4,
+    "lessonTitle": "家庭校园·常用词字"
+  },
+  {
+    "characterVal": "家",
+    "pinyin": "jiā",
+    "unit": 4,
+    "lessonTitle": "家庭校园·常用词字"
+  },
+  {
+    "characterVal": "书",
+    "pinyin": "shū",
+    "unit": 4,
+    "lessonTitle": "家庭校园·常用词字"
+  },
+  {
+    "characterVal": "本",
+    "pinyin": "běn",
+    "unit": 4,
+    "lessonTitle": "家庭校园·常用词字"
+  },
+  {
+    "characterVal": "笔",
+    "pinyin": "bǐ",
+    "unit": 4,
+    "lessonTitle": "家庭校园·常用词字"
+  },
+  {
+    "characterVal": "文",
+    "pinyin": "wén",
+    "unit": 4,
+    "lessonTitle": "家庭校园·常用词字"
+  },
+  {
+    "characterVal": "字",
+    "pinyin": "zì",
+    "unit": 4,
+    "lessonTitle": "家庭校园·常用词字"
+  },
+  {
+    "characterVal": "学",
+    "pinyin": "xué",
+    "unit": 4,
+    "lessonTitle": "家庭校园·常用词字"
+  },
+  {
+    "characterVal": "校",
+    "pinyin": "xiào",
+    "unit": 4,
+    "lessonTitle": "家庭校园·常用词字"
+  },
+  {
+    "characterVal": "生",
+    "pinyin": "shēng",
+    "unit": 4,
+    "lessonTitle": "家庭校园·常用词字"
+  },
+  {
+    "characterVal": "东",
+    "pinyin": "dōng",
+    "unit": 5,
+    "lessonTitle": "时间方位·四季变化"
+  },
+  {
+    "characterVal": "西",
+    "pinyin": "xī",
+    "unit": 5,
+    "lessonTitle": "时间方位·四季变化"
+  },
+  {
+    "characterVal": "南",
+    "pinyin": "nán",
+    "unit": 5,
+    "lessonTitle": "时间方位·四季变化"
+  },
+  {
+    "characterVal": "北",
+    "pinyin": "běi",
+    "unit": 5,
+    "lessonTitle": "时间方位·四季变化"
+  },
+  {
+    "characterVal": "左",
+    "pinyin": "zuǒ",
+    "unit": 5,
+    "lessonTitle": "时间方位·四季变化"
+  },
+  {
+    "characterVal": "右",
+    "pinyin": "yòu",
+    "unit": 5,
+    "lessonTitle": "时间方位·四季变化"
+  },
+  {
+    "characterVal": "前",
+    "pinyin": "qián",
+    "unit": 5,
+    "lessonTitle": "时间方位·四季变化"
+  },
+  {
+    "characterVal": "后",
+    "pinyin": "hòu",
+    "unit": 5,
+    "lessonTitle": "时间方位·四季变化"
+  },
+  {
+    "characterVal": "早",
+    "pinyin": "zǎo",
+    "unit": 5,
+    "lessonTitle": "时间方位·四季变化"
+  },
+  {
+    "characterVal": "午",
+    "pinyin": "wǔ",
+    "unit": 5,
+    "lessonTitle": "时间方位·四季变化"
+  },
+  {
+    "characterVal": "晚",
+    "pinyin": "wǎn",
+    "unit": 5,
+    "lessonTitle": "时间方位·四季变化"
+  },
+  {
+    "characterVal": "年",
+    "pinyin": "nián",
+    "unit": 5,
+    "lessonTitle": "时间方位·四季变化"
+  },
+  {
+    "characterVal": "今",
+    "pinyin": "jīn",
+    "unit": 5,
+    "lessonTitle": "时间方位·四季变化"
+  },
+  {
+    "characterVal": "明",
+    "pinyin": "míng",
+    "unit": 5,
+    "lessonTitle": "时间方位·四季变化"
+  },
+  {
+    "characterVal": "时",
+    "pinyin": "shí",
+    "unit": 5,
+    "lessonTitle": "时间方位·四季变化"
+  },
+  {
+    "characterVal": "春",
+    "pinyin": "chūn",
+    "unit": 5,
+    "lessonTitle": "时间方位·四季变化"
+  },
+  {
+    "characterVal": "夏",
+    "pinyin": "xià",
+    "unit": 5,
+    "lessonTitle": "时间方位·四季变化"
+  },
+  {
+    "characterVal": "秋",
+    "pinyin": "qiū",
+    "unit": 5,
+    "lessonTitle": "时间方位·四季变化"
+  },
+  {
+    "characterVal": "冬",
+    "pinyin": "dōng",
+    "unit": 5,
+    "lessonTitle": "时间方位·四季变化"
+  },
+  {
+    "characterVal": "雪",
+    "pinyin": "xuě",
+    "unit": 5,
+    "lessonTitle": "时间方位·四季变化"
+  }
+]

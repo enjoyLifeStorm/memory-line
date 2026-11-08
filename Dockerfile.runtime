@@ -1,0 +1,10 @@
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+RUN addgroup -S spring && adduser -S spring -G spring && mkdir -p /app/temp/data /app/temp/logs && chown -R spring:spring /app
+COPY --chown=spring:spring target/memory-line-1.0.0.jar /app/app.jar
+USER spring:spring
+EXPOSE 8088
+ENV TZ=Asia/Shanghai
+ENV SPRING_PROFILES_ACTIVE=prod
+ENV JAVA_OPTS="-Xms256m -Xmx512m -Dfile.encoding=UTF-8 -Duser.timezone=Asia/Shanghai"
+ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -jar /app/app.jar"]
